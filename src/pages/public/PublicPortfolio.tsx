@@ -15,7 +15,6 @@ import { Footer } from '@/components/layout/Footer';
 // Sections
 import { Preloader } from '@/components/sections/Preloader';
 import { Hero } from '@/components/sections/Hero';
-import { SelectedWork } from '@/components/sections/SelectedWork';
 import { ProjectShowcase } from '@/components/sections/ProjectShowcase';
 import { About } from '@/components/sections/About';
 import { Services } from '@/components/sections/Services';
@@ -133,7 +132,7 @@ export const PublicPortfolio: React.FC = () => {
         {/* Hero Section */}
         <Hero
           onOpenReel={handleOpenReel}
-          onExploreWork={() => handleNavigate('work')}
+          onExploreWork={() => handleNavigate('showcase')}
           onOpenContact={() => handleOpenContact()}
           onMouseEnterProject={handleMouseEnterProject}
           onMouseLeave={handleMouseLeave}
@@ -141,16 +140,7 @@ export const PublicPortfolio: React.FC = () => {
           playHover={playHover}
         />
 
-        {/* Selected Work Grid */}
-        <SelectedWork
-          onSelectProject={handleSelectProject}
-          onMouseEnterProject={handleMouseEnterProject}
-          onMouseLeave={handleMouseLeave}
-          playClick={playClick}
-          playHover={playHover}
-        />
-
-        {/* Cinematic Pinned Motion Showcase */}
+        {/* Cinematic Vertical Reels Motion Showcase */}
         <ProjectShowcase
           onSelectProject={handleSelectProject}
           onMouseEnterProject={handleMouseEnterProject}

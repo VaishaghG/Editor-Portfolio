@@ -36,8 +36,8 @@ export const Contact: React.FC<ContactProps> = ({
 
   const emailToUse = profile?.email || 'vaishagh.cut@gmail.com';
   const phoneToUse = profile?.phone || '+91 98765 43210';
-  const instaHandle = profile?.instagram_handle || '@vaishagh.edits';
-  const instaUrl = profile?.instagram_url || `https://instagram.com/${profile?.instagram_handle?.replace('@', '') || 'vaishagh.edits'}`;
+  const instaHandle = profile?.instagram_handle || '@vaish.aep';
+  const instaUrl = profile?.instagram_url || `https://instagram.com/${profile?.instagram_handle?.replace('@', '') || 'vaish.aep'}`;
 
   const handleCopyEmail = () => {
     playClick?.();
@@ -62,12 +62,12 @@ export const Contact: React.FC<ContactProps> = ({
 
   return (
     <section id="contact" className="relative py-10 sm:py-16 md:py-24 lg:py-36 bg-[#080808] overflow-hidden">
-      
+
       {/* Background Red Ambient Glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#E50914]/5 rounded-full blur-3xl pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 relative z-10">
-        
+
         {/* Giant Editorial Header */}
         <div className="text-center max-w-4xl mx-auto mb-6 sm:mb-12">
           <div className="inline-flex items-center gap-2 text-[#E50914] font-mono-code text-[10px] sm:text-xs tracking-widest uppercase mb-2 sm:mb-4 px-2.5 py-0.5 sm:px-3 sm:py-1 bg-[#E50914]/10 rounded-full border border-[#E50914]/30">
@@ -87,10 +87,10 @@ export const Contact: React.FC<ContactProps> = ({
 
         {/* Interactive Contact & Inquiry Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 lg:gap-12 items-start max-w-5xl mx-auto">
-          
+
           {/* Left: Quick Direct Channels (5 cols) */}
           <div className="lg:col-span-5 flex flex-col gap-2.5 sm:gap-4 font-mono-code text-xs">
-            
+
             {/* Email Card with 1-Click Copy */}
             <div className="p-3.5 sm:p-5 rounded-xl bg-[#0f0f0f] border border-white/10 flex flex-col gap-1.5 sm:gap-3">
               <span className="text-[#6B6862] uppercase tracking-widest text-[9px] sm:text-[10px]">DIRECT INQUIRY</span>

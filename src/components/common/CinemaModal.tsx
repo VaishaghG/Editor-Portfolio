@@ -138,7 +138,7 @@ export const CinemaModal: React.FC<CinemaModalProps> = ({
         </div>
 
         {/* Video Player & Stage */}
-        <div className="relative bg-black w-full aspect-video max-h-[38vh] sm:max-h-[52vh] flex items-center justify-center overflow-hidden group shrink-0">
+        <div className="relative bg-black w-full min-h-[260px] max-h-[48vh] sm:max-h-[58vh] flex items-center justify-center overflow-hidden group shrink-0">
           <video
             ref={videoRef}
             src={project.videoUrl}

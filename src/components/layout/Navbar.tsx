@@ -28,7 +28,7 @@ export const Navbar: React.FC<NavbarProps> = ({
       setIsScrolled(window.scrollY > 50);
 
       // Section spy
-      const sections = ['hero', 'work', 'showcase', 'about', 'services', 'process', 'tools', 'contact'];
+      const sections = ['hero', 'showcase', 'about', 'services', 'process', 'tools', 'contact'];
       const scrollPos = window.scrollY + 200;
 
       for (const sectionId of sections) {
@@ -61,7 +61,6 @@ export const Navbar: React.FC<NavbarProps> = ({
   }, [mobileMenuOpen]);
 
   const navLinks = [
-    { label: 'WORK', id: 'work' },
     { label: 'SHOWCASE', id: 'showcase' },
     { label: 'ABOUT', id: 'about' },
     { label: 'SERVICES', id: 'services' },
@@ -72,7 +71,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   const handleLinkClick = (id: string) => {
     playClick?.();
     setMobileMenuOpen(false);
-    onNavigate(id);
+    onNavigate(id === 'work' ? 'showcase' : id);
   };
 
   return (
