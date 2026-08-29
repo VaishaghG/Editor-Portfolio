@@ -1,5 +1,6 @@
 import React from 'react';
-import { ArrowUp, Mail, ExternalLink } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { ArrowUp, Mail, ExternalLink, Lock } from 'lucide-react';
 import { InstagramIcon, LinkedinIcon, YoutubeIcon } from '@/components/common/Icons';
 import { TimecodeHUD } from '@/components/common/TimecodeHUD';
 import { usePortfolio } from '@/context/PortfolioContext';
@@ -142,6 +143,15 @@ export const Footer: React.FC<FooterProps> = ({
             <span>&copy; {new Date().getFullYear()} VAISHAGH G.</span>
             <span>&bull;</span>
             <span className="text-[#F2F0EC]">CINEMATIC PORTFOLIO</span>
+            <span>&bull;</span>
+            <Link
+              to="/admin"
+              className="text-[#6B6862] hover:text-[#E50914] transition-colors inline-flex items-center gap-1 opacity-70 hover:opacity-100"
+              title="Admin CMS Login"
+            >
+              <Lock className="w-2.5 h-2.5" />
+              <span>CMS</span>
+            </Link>
           </div>
         </div>
 

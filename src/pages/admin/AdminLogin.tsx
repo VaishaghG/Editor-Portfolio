@@ -4,7 +4,7 @@ import { Lock, Mail, ArrowRight, Eye, EyeOff, ShieldAlert, CheckCircle2 } from '
 import { useAuth } from '@/context/AuthContext';
 
 export const AdminLogin: React.FC = () => {
-  const { signIn, isConfigured } = useAuth();
+  const { user, signIn, isConfigured } = useAuth();
   const navigate = useNavigate();
 
   const [email, setEmail] = useState('');
@@ -12,6 +12,12 @@ export const AdminLogin: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+
+  React.useEffect(() => {
+    if (user) {
+      navigate('/admin', { replace: true });
+    }
+  }, [user, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

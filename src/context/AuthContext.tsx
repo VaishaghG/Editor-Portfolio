@@ -24,13 +24,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       return;
     }
 
+    // Safety timeout in case getSession or network is unresponsive
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 4000);
+
     // Get initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       setUser(session?.user ?? null);
       setLoading(false);
+      clearTimeout(timer);
     }).catch(() => {
       setLoading(false);
+      clearTimeout(timer);
     });
 
     // Listen for auth state changes
@@ -41,6 +48,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     });
 
     return () => {
+      clearTimeout(timer);
       subscription.unsubscribe();
     };
   }, []);

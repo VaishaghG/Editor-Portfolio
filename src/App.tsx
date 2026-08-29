@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import { AuthProvider } from '@/context/AuthContext';
 import { PortfolioProvider } from '@/context/PortfolioContext';
 
@@ -21,9 +21,26 @@ import { ToolsEdit } from '@/pages/admin/ToolsEdit';
 import { ExperienceEdit } from '@/pages/admin/ExperienceEdit';
 import { SettingsEdit } from '@/pages/admin/SettingsEdit';
 
+function AdminShortcutHandler() {
+  const navigate = useNavigate();
+  React.useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Shortcut: Ctrl+Shift+A or Cmd+Shift+A jumps straight to admin
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'a' || e.key === 'A')) {
+        e.preventDefault();
+        navigate('/admin');
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [navigate]);
+  return null;
+}
+
 export default function App() {
   return (
     <BrowserRouter>
+      <AdminShortcutHandler />
       <AuthProvider>
         <PortfolioProvider>
           <Routes>
