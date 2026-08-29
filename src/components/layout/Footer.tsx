@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowUp, Mail, ExternalLink, Lock } from 'lucide-react';
-import { InstagramIcon, LinkedinIcon, YoutubeIcon } from '@/components/common/Icons';
+import { ArrowUp, Mail, ExternalLink, Lock, Check, Copy } from 'lucide-react';
+import { InstagramIcon, LinkedinIcon } from '@/components/common/Icons';
 import { TimecodeHUD } from '@/components/common/TimecodeHUD';
 import { usePortfolio } from '@/context/PortfolioContext';
 
@@ -19,18 +19,21 @@ export const Footer: React.FC<FooterProps> = ({
   playHover,
 }) => {
   const { profile, settings } = usePortfolio();
+  const [copiedEmail, setCopiedEmail] = useState(false);
 
   const instaUrl = profile?.instagram_url || `https://instagram.com/${profile?.instagram_handle?.replace('@', '') || 'vaishagh.edits'}`;
   const linkedinUrl = profile?.linkedin_url || `https://linkedin.com/in/${profile?.linkedin_handle || 'vaishagh'}`;
-  const youtubeUrl = profile?.youtube_url || `https://youtube.com/${profile?.youtube_handle || '@vaishaghedits'}`;
-  const emailUrl = `mailto:${profile?.email || 'vaishagh.cut@gmail.com'}`;
+  const emailAddress = profile?.email || 'vaishagh.cut@gmail.com';
 
-  const socialLinks = [
-    { name: 'Instagram', handle: profile?.instagram_handle || '@vaishagh.edits', url: instaUrl, icon: InstagramIcon },
-    { name: 'LinkedIn', handle: profile?.linkedin_handle || profile?.name || 'Vaishagh G.', url: linkedinUrl, icon: LinkedinIcon },
-    { name: 'YouTube', handle: profile?.youtube_handle || '@vaishaghedits', url: youtubeUrl, icon: YoutubeIcon },
-    { name: 'Email Direct', handle: profile?.email || 'vaishagh.cut@gmail.com', url: emailUrl, icon: Mail },
-  ];
+  const handleEmailClick = () => {
+    playClick?.();
+    navigator.clipboard.writeText(emailAddress);
+    setCopiedEmail(true);
+    setTimeout(() => setCopiedEmail(false), 2500);
+
+    // Open default mail client directly without opening a blank browser window
+    window.location.href = `mailto:${emailAddress}`;
+  };
 
   return (
     <footer className="relative bg-[#060606] text-[#F2F0EC] border-t border-white/10 pt-8 sm:pt-12 lg:pt-16 pb-6 sm:pb-10 lg:pb-12 overflow-hidden">
@@ -105,26 +108,57 @@ export const Footer: React.FC<FooterProps> = ({
           {/* Col 3: Social Links */}
           <div className="flex flex-col gap-1 sm:gap-2 sm:col-span-2">
             <span className="text-[#6B6862] uppercase tracking-widest text-[9px] sm:text-[10px]">CONNECT / SOCIAL</span>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 sm:gap-2">
-              {socialLinks.map((social) => {
-                const Icon = social.icon;
-                return (
-                  <a
-                    key={social.name}
-                    href={social.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onMouseEnter={playHover}
-                    className="min-h-[40px] sm:min-h-[44px] flex items-center justify-between p-2 sm:p-2.5 rounded bg-[#121212] hover:bg-[#1c1c1c] border border-white/5 hover:border-[#E50914]/40 transition-all text-[#9E9B93] hover:text-white group active:scale-[0.99]"
-                  >
-                    <div className="flex items-center gap-2 truncate">
-                      <Icon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#E50914] shrink-0" />
-                      <span className="truncate text-[11px] sm:text-xs">{social.name}</span>
-                    </div>
-                    <ExternalLink className="w-3 h-3 sm:w-3.5 sm:h-3.5 opacity-40 group-hover:opacity-100 transition-opacity shrink-0" />
-                  </a>
-                );
-              })}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-1.5 sm:gap-2">
+              {/* Instagram */}
+              <a
+                href={instaUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                onMouseEnter={playHover}
+                className="min-h-[40px] sm:min-h-[44px] flex items-center justify-between p-2 sm:p-2.5 rounded bg-[#121212] hover:bg-[#1c1c1c] border border-white/5 hover:border-[#E50914]/40 transition-all text-[#9E9B93] hover:text-white group active:scale-[0.99]"
+              >
+                <div className="flex items-center gap-2 truncate">
+                  <InstagramIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#E50914] shrink-0" />
+                  <span className="truncate text-[11px] sm:text-xs">Instagram</span>
+                </div>
+                <ExternalLink className="w-3 h-3 sm:w-3.5 sm:h-3.5 opacity-40 group-hover:opacity-100 transition-opacity shrink-0" />
+              </a>
+
+              {/* LinkedIn */}
+              <a
+                href={linkedinUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                onMouseEnter={playHover}
+                className="min-h-[40px] sm:min-h-[44px] flex items-center justify-between p-2 sm:p-2.5 rounded bg-[#121212] hover:bg-[#1c1c1c] border border-white/5 hover:border-[#E50914]/40 transition-all text-[#9E9B93] hover:text-white group active:scale-[0.99]"
+              >
+                <div className="flex items-center gap-2 truncate">
+                  <LinkedinIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#E50914] shrink-0" />
+                  <span className="truncate text-[11px] sm:text-xs">LinkedIn</span>
+                </div>
+                <ExternalLink className="w-3 h-3 sm:w-3.5 sm:h-3.5 opacity-40 group-hover:opacity-100 transition-opacity shrink-0" />
+              </a>
+
+              {/* Email Direct (Copies to clipboard & triggers mailto without blank tab) */}
+              <button
+                type="button"
+                onClick={handleEmailClick}
+                onMouseEnter={playHover}
+                className="min-h-[40px] sm:min-h-[44px] flex items-center justify-between p-2 sm:p-2.5 rounded bg-[#121212] hover:bg-[#1c1c1c] border border-white/5 hover:border-[#E50914]/40 transition-all text-[#9E9B93] hover:text-white group active:scale-[0.99] cursor-pointer text-left w-full"
+                title={`Click to copy and email: ${emailAddress}`}
+              >
+                <div className="flex items-center gap-2 truncate">
+                  <Mail className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#E50914] shrink-0" />
+                  <span className="truncate text-[11px] sm:text-xs">
+                    {copiedEmail ? 'Copied Email!' : 'Email Direct'}
+                  </span>
+                </div>
+                {copiedEmail ? (
+                  <Check className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                ) : (
+                  <Copy className="w-3 h-3 sm:w-3.5 sm:h-3.5 opacity-40 group-hover:opacity-100 transition-opacity shrink-0" />
+                )}
+              </button>
             </div>
           </div>
         </div>
