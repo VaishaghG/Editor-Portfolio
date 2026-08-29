@@ -130,8 +130,8 @@ export const Navbar: React.FC<NavbarProps> = ({
             })}
           </nav>
 
-          {/* Right Desktop Header Actions (Untouched) */}
-          <div className="hidden sm:flex items-center gap-4">
+          {/* Right Desktop Header Actions (MD+ screens) */}
+          <div className="hidden md:flex items-center gap-4">
             <SoundToggle isMuted={isMuted} onToggle={onToggleSound} onHover={playHover} />
 
             <button
@@ -147,42 +147,38 @@ export const Navbar: React.FC<NavbarProps> = ({
             </button>
           </div>
 
-          {/* Mobile Actions: LET'S TALK + Sound Toggle + Dedicated MENU button */}
-          <div className="flex md:hidden items-center gap-1.5 sm:gap-2">
+          {/* Mobile Actions: Clean LET'S TALK + Properly Sized MENU Button (< MD screens) */}
+          <div className="flex md:hidden items-center gap-2 sm:gap-2.5">
             <button
               onClick={() => {
                 playClick?.();
                 onOpenContact();
               }}
               onMouseEnter={playHover}
-              className="bg-[#F2F0EC] hover:bg-[#E50914] active:bg-[#E50914] text-black hover:text-white active:text-white px-2.5 sm:px-3 py-1.5 rounded-full text-[10px] sm:text-xs font-mono-code font-bold uppercase tracking-wider transition-all duration-300 flex items-center gap-1 cursor-pointer shadow-[0_0_12px_rgba(255,255,255,0.12)] active:scale-95 shrink-0"
+              className="bg-[#F2F0EC] hover:bg-[#E50914] active:bg-[#E50914] text-black hover:text-white active:text-white px-3 sm:px-3.5 py-1.5 rounded-full text-xs font-mono-code font-bold uppercase tracking-wider transition-all duration-300 flex items-center gap-1 cursor-pointer shadow-[0_0_12px_rgba(255,255,255,0.15)] active:scale-95 shrink-0"
               aria-label="Let's talk - open contact"
             >
               <span>LET'S TALK</span>
-              <ArrowUpRight className="w-3 h-3 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+              <ArrowUpRight className="w-3.5 h-3.5" />
             </button>
-
-            <div className="scale-85 sm:scale-90 origin-right">
-              <SoundToggle isMuted={isMuted} onToggle={onToggleSound} onHover={playHover} />
-            </div>
 
             <button
               onClick={() => {
                 playClick?.();
                 setMobileMenuOpen(!mobileMenuOpen);
               }}
-              className="min-h-[36px] min-w-[36px] px-2.5 py-1.5 rounded-lg bg-[#141414] hover:bg-[#1a1a1a] text-white hover:text-[#E50914] transition-all cursor-pointer border border-white/15 flex items-center gap-1 font-mono-code text-xs active:scale-95"
+              className="px-3 py-1.5 rounded-lg bg-[#141414] hover:bg-[#1a1a1a] text-white hover:text-[#E50914] transition-all cursor-pointer border border-white/15 flex items-center gap-1.5 font-mono-code text-xs active:scale-95 shrink-0"
               aria-label="Toggle mobile menu"
             >
               {mobileMenuOpen ? (
                 <>
-                  <X className="w-3.5 h-3.5 text-[#E50914]" />
-                  <span className="text-[#E50914] font-bold text-[10px] sm:text-xs">CLOSE</span>
+                  <X className="w-4 h-4 text-[#E50914]" />
+                  <span className="text-[#E50914] font-bold text-xs">CLOSE</span>
                 </>
               ) : (
                 <>
-                  <Menu className="w-3.5 h-3.5" />
-                  <span className="text-[10px] sm:text-xs">MENU</span>
+                  <Menu className="w-4 h-4" />
+                  <span className="text-xs">MENU</span>
                 </>
               )}
             </button>
