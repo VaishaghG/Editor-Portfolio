@@ -1,4 +1,5 @@
 import React, { useState, useCallback } from 'react';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useSmoothScroll } from '@/hooks/useSmoothScroll';
 import { useAudioFX } from '@/hooks/useAudioFX';
 import { Project } from '@/data/projects';
@@ -107,7 +108,14 @@ export const PublicPortfolio: React.FC = () => {
 
       {/* Preloader Sequence */}
       {isLoading && (
-        <Preloader onComplete={() => setIsLoading(false)} />
+        <Preloader
+          onComplete={() => {
+            setIsLoading(false);
+            setTimeout(() => {
+              ScrollTrigger.refresh();
+            }, 200);
+          }}
+        />
       )}
 
       {/* Main Navigation Bar */}

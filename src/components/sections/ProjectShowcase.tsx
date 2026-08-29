@@ -25,47 +25,100 @@ export const ProjectShowcase: React.FC<ProjectShowcaseProps> = ({
   const { projects } = usePortfolio();
   const sectionRef = useRef<HTMLDivElement>(null);
   const desktopTriggerRef = useRef<HTMLDivElement>(null);
+  const desktopTrackRef = useRef<HTMLDivElement>(null);
   const mobileTrackRef = useRef<HTMLDivElement>(null);
 
+  const [activeDesktopIndex, setActiveDesktopIndex] = useState(0);
   const [activeMobileIndex, setActiveMobileIndex] = useState(0);
 
   const featured = projects.filter((p) => p.featured);
   const showcaseProjects = featured.length >= 2 ? featured.slice(0, 4) : projects.slice(0, 4);
 
   useEffect(() => {
-    const mm = gsap.matchMedia();
+    const ctx = gsap.context(() => {
+      const mm = gsap.matchMedia();
 
-    // =========================================================================
-    // 1. DESKTOP BREAKPOINT (min-width: 1024px) - 100% LOCKED & UNCHANGED
-    // =========================================================================
-    mm.add('(min-width: 1024px)', () => {
-      const panels = gsap.utils.toArray<HTMLElement>('.showcase-slide-desktop');
-      if (panels.length > 0 && desktopTriggerRef.current) {
-        gsap.to(panels, {
-          xPercent: -100 * (panels.length - 1),
+      // =======================================================================
+      // 1. DESKTOP BREAKPOINT (min-width: 1024px) - PINNED HORIZONTAL REEL
+      // =======================================================================
+      mm.add('(min-width: 1024px)', () => {
+        const track = desktopTrackRef.current;
+        const trigger = desktopTriggerRef.current;
+        if (!track || !trigger) return;
+
+        const totalSlides = showcaseProjects.length;
+        if (totalSlides <= 1) return;
+
+        // Exact horizontal travel distance
+        const getScrollDistance = () => track.scrollWidth - window.innerWidth;
+
+        const tween = gsap.to(track, {
+          x: () => -getScrollDistance(),
           ease: 'none',
           scrollTrigger: {
-            trigger: desktopTriggerRef.current,
+            id: 'showcase-desktop-st',
+            trigger: trigger,
             pin: true,
             scrub: 1,
-            snap: 1 / (panels.length - 1),
-            end: () => `+=${desktopTriggerRef.current?.offsetWidth || 3000}`,
+            start: 'top top',
+            end: () => `+=${Math.max(getScrollDistance(), window.innerHeight * 2.5)}`,
             invalidateOnRefresh: true,
+            anticipatePin: 1,
+            onUpdate: (self) => {
+              const idx = Math.min(
+                totalSlides - 1,
+                Math.max(0, Math.round(self.progress * (totalSlides - 1)))
+              );
+              setActiveDesktopIndex(idx);
+            },
           },
         });
 
         gsap.to('.showcase-bg-text-desktop', {
-          x: -250,
+          x: -350,
           scrollTrigger: {
-            trigger: desktopTriggerRef.current,
+            trigger: trigger,
             scrub: 0.5,
           },
         });
-      }
-    });
 
-    return () => mm.revert();
+        return () => {
+          tween.kill();
+        };
+      });
+    }, sectionRef);
+
+    const timer = setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 250);
+
+    return () => {
+      clearTimeout(timer);
+      ctx.revert();
+    };
   }, [showcaseProjects.length]);
+
+  // Jump to specific slide on desktop via click/keyboard
+  const scrollToDesktopSlide = (idx: number) => {
+    playClick?.();
+    const st = ScrollTrigger.getById('showcase-desktop-st');
+    if (st) {
+      const total = showcaseProjects.length;
+      const progress = total > 1 ? idx / (total - 1) : 0;
+      const targetY = st.start + progress * (st.end - st.start);
+      window.scrollTo({ top: targetY, behavior: 'smooth' });
+    }
+  };
+
+  const handlePrevDesktop = () => {
+    const prev = Math.max(0, activeDesktopIndex - 1);
+    scrollToDesktopSlide(prev);
+  };
+
+  const handleNextDesktop = () => {
+    const next = Math.min(showcaseProjects.length - 1, activeDesktopIndex + 1);
+    scrollToDesktopSlide(next);
+  };
 
   // Track active horizontal slide on mobile touch scroll
   const handleMobileScroll = () => {
@@ -94,7 +147,7 @@ export const ProjectShowcase: React.FC<ProjectShowcaseProps> = ({
     <section id="showcase" ref={sectionRef} className="relative bg-[#060606] overflow-hidden editorial-border-b">
       
       {/* ======================================================================= */}
-      {/* DESKTOP SHOWCASE (min-width: 1024px) - 100% LOCKED & UNCHANGED */}
+      {/* DESKTOP SHOWCASE (min-width: 1024px) */}
       {/* ======================================================================= */}
       <div className="hidden lg:block">
         {/* Background Kinetic Marquee Typography on Desktop */}
@@ -105,34 +158,61 @@ export const ProjectShowcase: React.FC<ProjectShowcaseProps> = ({
         </div>
 
         {/* Pinned Showcase Container for Desktop */}
-        <div ref={desktopTriggerRef} className="w-full min-h-screen flex flex-col justify-between py-16">
+        <div ref={desktopTriggerRef} className="w-full h-screen flex flex-col justify-between py-8 lg:py-12 overflow-hidden relative">
           
           {/* Section Header */}
           <div className="max-w-7xl mx-auto w-full px-8 z-10">
-            <div className="flex justify-between items-end pb-6 editorial-border-b">
+            <div className="flex justify-between items-end pb-4 editorial-border-b">
               <div>
                 <div className="flex items-center gap-2 text-[#E50914] font-mono-code text-xs tracking-widest uppercase mb-1">
                   <span className="w-2 h-2 rounded-full bg-[#E50914] animate-pulse-red" />
                   MOTION ARCHIVE // HORIZONTAL REEL
                 </div>
-                <h2 className="font-bebas text-7xl tracking-tight text-[#F2F0EC]">
+                <h2 className="font-bebas text-6xl lg:text-7xl tracking-tight text-[#F2F0EC]">
                   CINEMATIC <span className="text-[#E50914]">EXPERIENCES</span>
                 </h2>
               </div>
-              <div className="font-mono-code text-xs text-[#9E9B93]">
-                <span>[ SCROLL HORIZONTALLY TO EXPLORE ]</span>
+              <div className="flex items-center gap-4 font-mono-code text-xs text-[#9E9B93]">
+                {/* Desktop Prev / Next Fast Navigation */}
+                <div className="flex items-center gap-1.5">
+                  <button
+                    onClick={handlePrevDesktop}
+                    disabled={activeDesktopIndex === 0}
+                    onMouseEnter={playHover}
+                    className="p-2 rounded bg-[#141414] hover:bg-[#E50914] hover:text-white text-[#9E9B93] border border-white/10 transition-all cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed active:scale-95"
+                    title="Previous Project"
+                    aria-label="Previous project"
+                  >
+                    <ChevronLeft className="w-4 h-4" />
+                  </button>
+                  <button
+                    onClick={handleNextDesktop}
+                    disabled={activeDesktopIndex === showcaseProjects.length - 1}
+                    onMouseEnter={playHover}
+                    className="p-2 rounded bg-[#141414] hover:bg-[#E50914] hover:text-white text-[#9E9B93] border border-white/10 transition-all cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed active:scale-95"
+                    title="Next Project"
+                    aria-label="Next project"
+                  >
+                    <ChevronRight className="w-4 h-4" />
+                  </button>
+                </div>
+                <span className="text-[11px]">[ SCROLL TO EXPLORE &bull; 0{activeDesktopIndex + 1}/0{showcaseProjects.length} ]</span>
               </div>
             </div>
           </div>
 
           {/* Horizontal Slides Reel on Desktop */}
-          <div className="flex flex-row w-[400vw] h-full items-center z-10 px-12 my-auto py-8">
+          <div
+            ref={desktopTrackRef}
+            className="flex flex-nowrap items-center z-10 my-auto will-change-transform"
+            style={{ width: `${showcaseProjects.length * 100}vw` }}
+          >
             {showcaseProjects.map((project, idx) => (
               <div
                 key={`desktop-${project.id}`}
-                className="showcase-slide-desktop w-screen h-[70vh] flex items-center justify-center px-16"
+                className="showcase-slide-desktop w-screen shrink-0 h-[64vh] max-h-[580px] flex items-center justify-center px-10 lg:px-20"
               >
-                <div className="w-full max-w-5xl grid grid-cols-12 gap-8 items-center bg-[#0d0d0d] border border-white/10 rounded-2xl p-10 shadow-2xl relative overflow-hidden group">
+                <div className="w-full max-w-5xl grid grid-cols-12 gap-8 items-center bg-[#0d0d0d] border border-white/10 rounded-2xl p-8 lg:p-10 shadow-2xl relative overflow-hidden group">
                   
                   {/* Huge Background Project Number */}
                   <span className="absolute right-4 bottom-2 font-bebas text-[14rem] text-white/[0.03] select-none pointer-events-none leading-none">
@@ -197,27 +277,27 @@ export const ProjectShowcase: React.FC<ProjectShowcaseProps> = ({
                         <span className="text-[#9E9B93] uppercase font-normal">{project.category}</span>
                       </div>
 
-                      <h3 className="font-bebas text-5xl text-[#F2F0EC] tracking-wide mb-2">
+                      <h3 className="font-bebas text-4xl lg:text-5xl text-[#F2F0EC] tracking-wide mb-1.5">
                         {project.title}
                       </h3>
-                      <p className="font-space text-xs uppercase text-[#E50914] tracking-wider mb-4">
+                      <p className="font-space text-xs uppercase text-[#E50914] tracking-wider mb-3">
                         {project.subtitle}
                       </p>
 
-                      <p className="font-sans text-sm text-[#9E9B93] leading-relaxed mb-6">
+                      <p className="font-sans text-xs lg:text-sm text-[#9E9B93] leading-relaxed mb-5 line-clamp-3">
                         {project.description}
                       </p>
 
                       {/* Technical Pipeline Tags */}
-                      <div className="space-y-2 mb-6">
-                        <div className="text-[11px] font-mono-code text-[#6B6862] uppercase tracking-wider">
+                      <div className="space-y-1.5 mb-5">
+                        <div className="text-[10px] font-mono-code text-[#6B6862] uppercase tracking-wider">
                           PIPELINE BREAKDOWN:
                         </div>
                         <div className="flex flex-wrap gap-1.5 font-mono-code text-xs">
-                          {project.deliverables.map((item, dIdx) => (
+                          {project.deliverables.slice(0, 3).map((item, dIdx) => (
                             <span
                               key={dIdx}
-                              className="bg-[#181818] border border-white/10 px-2.5 py-1 rounded text-[11px] text-[#F2F0EC]"
+                              className="bg-[#181818] border border-white/10 px-2 py-0.5 rounded text-[11px] text-[#F2F0EC]"
                             >
                               {item}
                             </span>
@@ -232,7 +312,7 @@ export const ProjectShowcase: React.FC<ProjectShowcaseProps> = ({
                         onSelectProject(project);
                       }}
                       onMouseEnter={playHover}
-                      className="w-full py-3 bg-[#181818] hover:bg-[#E50914] text-[#F2F0EC] hover:text-white border border-white/10 hover:border-[#E50914] rounded font-bebas text-lg tracking-wider transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer shadow-md"
+                      className="w-full py-3 bg-[#181818] hover:bg-[#E50914] text-[#F2F0EC] hover:text-white border border-white/10 hover:border-[#E50914] rounded font-bebas text-lg tracking-wider transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer shadow-md active:scale-98"
                     >
                       <span>OPEN PROJECT CINEMA</span>
                       <ArrowUpRight className="w-4 h-4" />
@@ -246,11 +326,29 @@ export const ProjectShowcase: React.FC<ProjectShowcaseProps> = ({
 
           {/* Bottom Film Strip Indicator */}
           <div className="max-w-7xl mx-auto w-full px-8 z-10">
-            <div className="flex justify-between items-center pt-4 editorial-border-t font-mono-code text-xs text-[#6B6862]">
+            <div className="flex justify-between items-center pt-3 editorial-border-t font-mono-code text-xs text-[#6B6862]">
               <span>MOTION SHOWCASE &bull; 2026 EDITION</span>
+
+              {/* Realtime Interactive Slide Dots */}
               <div className="flex items-center gap-2">
-                <span className="w-2 h-2 bg-[#E50914] rounded-full" />
-                <span className="text-[#F2F0EC]">4 PINNED PIECES</span>
+                {showcaseProjects.map((_, dIdx) => (
+                  <button
+                    key={`desktop-dot-${dIdx}`}
+                    onClick={() => scrollToDesktopSlide(dIdx)}
+                    className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
+                      activeDesktopIndex === dIdx
+                        ? 'w-7 bg-[#E50914]'
+                        : 'w-2 bg-white/20 hover:bg-white/50'
+                    }`}
+                    title={`Jump to project 0${dIdx + 1}`}
+                    aria-label={`Jump to project 0${dIdx + 1}`}
+                  />
+                ))}
+              </div>
+
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 bg-[#E50914] rounded-full animate-pulse-red" />
+                <span className="text-[#F2F0EC]">{showcaseProjects.length} PINNED PIECES</span>
               </div>
             </div>
           </div>
