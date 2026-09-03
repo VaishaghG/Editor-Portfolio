@@ -22,7 +22,7 @@ export const ProjectShowcase: React.FC<ProjectShowcaseProps> = ({
   playClick,
   playHover,
 }) => {
-  const { projects } = usePortfolio();
+  const { projects, isLoading } = usePortfolio();
   const sectionRef = useRef<HTMLDivElement>(null);
   const desktopTriggerRef = useRef<HTMLDivElement>(null);
   const desktopTrackRef = useRef<HTMLDivElement>(null);
@@ -146,8 +146,42 @@ export const ProjectShowcase: React.FC<ProjectShowcaseProps> = ({
   return (
     <section id="showcase" ref={sectionRef} className="relative bg-[#060606] overflow-hidden editorial-border-b">
       
-      {/* ======================================================================= */}
-      {/* DESKTOP SHOWCASE (min-width: 1024px) - 9:16 VERTICAL REELS FOCUS */}
+      {isLoading || showcaseProjects.length === 0 ? (
+        <div className="py-20 lg:py-32">
+          <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8">
+             <div className="flex justify-between items-end pb-4 editorial-border-b mb-10">
+                <div>
+                  <div className="flex items-center gap-2 text-[#E50914] font-mono-code text-[10px] sm:text-xs tracking-widest uppercase mb-1">
+                    <span className="w-2 h-2 rounded-full bg-[#E50914] animate-pulse-red" />
+                    VERTICAL ARCHIVE // 9:16 REELS
+                  </div>
+                  <h2 className="font-bebas text-4xl sm:text-6xl lg:text-7xl tracking-tight text-[#F2F0EC]">
+                    CINEMATIC <span className="text-[#E50914]">EXPERIENCES</span>
+                  </h2>
+                </div>
+             </div>
+
+             {isLoading ? (
+               <div className="w-full flex flex-col lg:flex-row gap-6 lg:gap-10 opacity-50 animate-pulse">
+                  <div className="w-full lg:w-[300px] h-[400px] lg:h-[500px] bg-[#121212] rounded-xl border border-white/5" />
+                  <div className="flex-1 flex flex-col gap-4 justify-center">
+                     <div className="w-3/4 lg:w-1/2 h-10 lg:h-12 bg-[#121212] rounded border border-white/5" />
+                     <div className="w-full lg:w-3/4 h-6 bg-[#121212] rounded border border-white/5" />
+                     <div className="w-1/2 lg:w-1/4 h-6 bg-[#121212] rounded border border-white/5" />
+                  </div>
+               </div>
+             ) : (
+               <div className="w-full py-16 sm:py-20 flex flex-col items-center justify-center border border-white/5 rounded-2xl bg-[#0a0a0a]">
+                 <span className="font-mono-code text-[#6B6862] text-[10px] sm:text-xs uppercase mb-3">SYSTEM UPDATE</span>
+                 <p className="font-space text-sm sm:text-lg text-[#F2F0EC]">Experiences are being loaded from the database.</p>
+               </div>
+             )}
+          </div>
+        </div>
+      ) : (
+        <>
+          {/* ======================================================================= */}
+          {/* DESKTOP SHOWCASE (min-width: 1024px) - 9:16 VERTICAL REELS FOCUS */}
       {/* ======================================================================= */}
       <div className="hidden lg:block">
         {/* Background Kinetic Marquee Typography on Desktop */}
@@ -565,6 +599,8 @@ export const ProjectShowcase: React.FC<ProjectShowcaseProps> = ({
 
         </div>
       </div>
+      </>
+      )}
 
     </section>
   );

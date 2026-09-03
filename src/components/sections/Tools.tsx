@@ -52,8 +52,12 @@ export const Tools: React.FC<ToolsProps> = ({
           
           {/* Left: Giant Typography Interactive Stack (7 cols) */}
           <div className="lg:col-span-7 flex flex-col divide-y divide-white/10 border-t border-b border-white/10">
-            {tools.map((tool) => {
-              const isSelected = selectedTool.id === tool.id;
+            {tools.length === 0 ? (
+              <div className="py-8 px-4 text-[#9E9B93] font-mono-code text-xs text-center">
+                LOADING TOOLS...
+              </div>
+            ) : tools.map((tool) => {
+              const isSelected = selectedTool?.id === tool.id;
 
               return (
                 <div
@@ -98,55 +102,57 @@ export const Tools: React.FC<ToolsProps> = ({
 
           {/* Right: Technical Inspector HUD (5 cols) */}
           <div className="lg:col-span-5">
-            <div className="bg-[#0e0e0e] border border-white/15 rounded-xl p-4 sm:p-8 shadow-2xl relative overflow-hidden font-mono-code text-xs">
-              
-              {/* Top Inspector Bar */}
-              <div className="flex items-center justify-between pb-2.5 sm:pb-4 border-b border-white/10 text-[#6B6862]">
-                <div className="flex items-center gap-2">
-                  <Terminal className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#E50914]" />
-                  <span>INSPECTOR // {selectedTool.id.toUpperCase()}</span>
+            {selectedTool && (
+              <div className="bg-[#0e0e0e] border border-white/15 rounded-xl p-4 sm:p-8 shadow-2xl relative overflow-hidden font-mono-code text-xs sticky top-28">
+                
+                {/* Top Inspector Bar */}
+                <div className="flex items-center justify-between pb-2.5 sm:pb-4 border-b border-white/10 text-[#6B6862]">
+                  <div className="flex items-center gap-2">
+                    <Terminal className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#E50914]" />
+                    <span>INSPECTOR // {selectedTool.id.toUpperCase()}</span>
+                  </div>
+                  <span className="text-[#E50914]">PRO PIPELINE</span>
                 </div>
-                <span className="text-[#E50914]">PRO PIPELINE</span>
-              </div>
 
-              {/* Tool Header */}
-              <div className="py-3 sm:py-6 border-b border-white/10">
-                <span className="text-[9px] sm:text-[10px] text-[#6B6862] uppercase block">SOFTWARE SUITE</span>
-                <h4 className="font-bebas text-xl sm:text-3xl text-[#F2F0EC] tracking-wider mt-0.5 sm:mt-1">
-                  {selectedTool.name}
-                </h4>
-                <p className="font-space text-[10px] sm:text-xs text-[#E50914] uppercase mt-0.5 sm:mt-1 font-medium">
-                  {selectedTool.role}
-                </p>
-                <p className="font-sans text-xs text-[#9E9B93] leading-relaxed mt-2 sm:mt-3">
-                  {selectedTool.description}
-                </p>
-              </div>
+                {/* Tool Header */}
+                <div className="py-3 sm:py-6 border-b border-white/10">
+                  <span className="text-[9px] sm:text-[10px] text-[#6B6862] uppercase block">SOFTWARE SUITE</span>
+                  <h4 className="font-bebas text-xl sm:text-3xl text-[#F2F0EC] tracking-wider mt-0.5 sm:mt-1">
+                    {selectedTool.name}
+                  </h4>
+                  <p className="font-space text-[10px] sm:text-xs text-[#E50914] uppercase mt-0.5 sm:mt-1 font-medium">
+                    {selectedTool.role}
+                  </p>
+                  <p className="font-sans text-xs text-[#9E9B93] leading-relaxed mt-2 sm:mt-3">
+                    {selectedTool.description}
+                  </p>
+                </div>
 
-              {/* Shortcuts & Core Features */}
-              <div className="pt-3 sm:pt-5 space-y-2.5 sm:space-y-4">
-                <div>
-                  <span className="text-[9px] sm:text-[10px] text-[#6B6862] uppercase block mb-1 sm:mb-1.5 flex items-center gap-1.5">
-                    <Command className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#E50914]" />
-                    KEY MUSCLE-MEMORY SHORTCUTS
-                  </span>
-                  <div className="bg-[#161616] p-2 rounded border border-white/5 text-[#F2F0EC] font-bold tracking-widest text-[10px] sm:text-xs">
-                    {selectedTool.shortcut}
+                {/* Shortcuts & Core Features */}
+                <div className="pt-3 sm:pt-5 space-y-2.5 sm:space-y-4">
+                  <div>
+                    <span className="text-[9px] sm:text-[10px] text-[#6B6862] uppercase block mb-1 sm:mb-1.5 flex items-center gap-1.5">
+                      <Command className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#E50914]" />
+                      KEY MUSCLE-MEMORY SHORTCUTS
+                    </span>
+                    <div className="bg-[#161616] p-2 rounded border border-white/5 text-[#F2F0EC] font-bold tracking-widest text-[10px] sm:text-xs">
+                      {selectedTool.shortcut}
+                    </div>
+                  </div>
+
+                  <div>
+                    <span className="text-[9px] sm:text-[10px] text-[#6B6862] uppercase block mb-0.5 sm:mb-1">
+                      KEY CAPABILITY FOCUS
+                    </span>
+                    <div className="flex items-center gap-2 text-[#9E9B93] text-xs">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-[#E50914] shrink-0" />
+                      <span>{selectedTool.featuredFeature}</span>
+                    </div>
                   </div>
                 </div>
 
-                <div>
-                  <span className="text-[9px] sm:text-[10px] text-[#6B6862] uppercase block mb-0.5 sm:mb-1">
-                    KEY CAPABILITY FOCUS
-                  </span>
-                  <div className="flex items-center gap-2 text-[#9E9B93] text-xs">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-[#E50914] shrink-0" />
-                    <span>{selectedTool.featuredFeature}</span>
-                  </div>
-                </div>
               </div>
-
-            </div>
+            )}
           </div>
 
         </div>

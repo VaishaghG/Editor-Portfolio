@@ -175,11 +175,12 @@ export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   );
   const [profile, setProfile] = useState<DbProfile>(DEFAULT_PROFILE);
   const [settings, setSettings] = useState<DbSiteSettings>(DEFAULT_SETTINGS);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   const fetchData = useCallback(async () => {
     if (!isSupabaseConfigured) {
+      setIsLoading(false);
       return;
     }
 
@@ -249,26 +250,12 @@ export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     fetchData();
   }, [fetchData]);
 
-  // Derive public lists (with instant fallback to DEFAULT static constants if DB empty)
-  const projects: Project[] = allProjects.length > 0
-    ? allProjects.filter((p) => p.published).map(mapDbProjectToProject)
-    : DEFAULT_PROJECTS;
-
-  const services: Service[] = allServices.length > 0
-    ? allServices.filter((s) => s.published).map(mapDbServiceToService)
-    : DEFAULT_SERVICES;
-
-  const processSteps: ProcessStep[] = allProcessSteps.length > 0
-    ? allProcessSteps.filter((p) => p.published).map(mapDbProcessToProcess)
-    : DEFAULT_PROCESS_STEPS;
-
-  const tools: ToolItem[] = allTools.length > 0
-    ? allTools.filter((t) => t.published).map(mapDbToolToTool)
-    : DEFAULT_TOOLS;
-
-  const timeline: TimelineItem[] = allExperience.length > 0
-    ? allExperience.filter((e) => e.published).map(mapDbExperienceToTimeline)
-    : DEFAULT_TIMELINE;
+  // Derive public lists (without fallback to static constants to ensure DB is the source of truth)
+  const projects: Project[] = allProjects.filter((p) => p.published).map(mapDbProjectToProject);
+  const services: Service[] = allServices.filter((s) => s.published).map(mapDbServiceToService);
+  const processSteps: ProcessStep[] = allProcessSteps.filter((p) => p.published).map(mapDbProcessToProcess);
+  const tools: ToolItem[] = allTools.filter((t) => t.published).map(mapDbToolToTool);
+  const timeline: TimelineItem[] = allExperience.filter((e) => e.published).map(mapDbExperienceToTimeline);
 
   return (
     <PortfolioContext.Provider

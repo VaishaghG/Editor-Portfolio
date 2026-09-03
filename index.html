@@ -6,7 +6,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     
     <!-- Primary Meta Tags -->
-    <title>VAISHAGH G. — Freelance Video Editor &amp; Motion Designer</title>
+    <title>Vaishagh G. | Video Editor & Motion Designer</title>
+    <!-- Error Logger for Debugging -->
+    <script>
+      const originalConsoleError = console.error;
+      console.error = function(...args) {
+        let msg = '';
+        try {
+          msg = args.map(a => {
+            if (a instanceof Error) return a.stack || a.message;
+            return typeof a === 'object' ? JSON.stringify(a, (k,v) => {
+              if (k !== '' && v === a) return '[Circular]';
+              return v;
+            }) : String(a);
+          }).join(' ');
+        } catch(err) {
+          msg = 'Could not stringify error: ' + err.message;
+        }
+        fetch('/log-error', { method: 'POST', body: 'CONSOLE ERROR: ' + msg });
+        originalConsoleError.apply(console, args);
+      };
+      window.addEventListener('error', function(e) {
+        fetch('/log-error', { method: 'POST', body: 'WINDOW ERROR: ' + e.message + '\n' + (e.error ? e.error.stack : '') });
+      });
+      window.addEventListener('unhandledrejection', function(e) {
+        fetch('/log-error', { method: 'POST', body: 'Promise Rejection: ' + e.reason });
+      });
+    </script>
     <meta name="title" content="VAISHAGH G. — Freelance Video Editor & Motion Designer" />
     <meta name="description" content="Cinematic video editor and motion designer turning raw footage into unforgettable stories. Specializing in high-retention short-form, commercial brand films, and motion graphics." />
     <meta name="theme-color" content="#080808" />

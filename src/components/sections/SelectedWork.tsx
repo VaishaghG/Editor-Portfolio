@@ -18,7 +18,7 @@ export const SelectedWork: React.FC<SelectedWorkProps> = ({
   playClick,
   playHover,
 }) => {
-  const { projects } = usePortfolio();
+  const { projects, isLoading } = usePortfolio();
   const [filter, setFilter] = useState<string>('ALL');
   const [hoveredProjectId, setHoveredProjectId] = useState<string | null>(null);
 
@@ -83,7 +83,33 @@ export const SelectedWork: React.FC<SelectedWorkProps> = ({
 
         {/* Editorial Project Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-8 lg:gap-10 pt-6 sm:pt-10">
-          {filteredProjects.map((project, index) => {
+          {isLoading ? (
+            Array.from({ length: 4 }).map((_, index) => {
+              const isWide = index === 0 || index === 3;
+              return (
+                <div
+                  key={`skeleton-${index}`}
+                  className={`bg-[#0e0e0e] border border-white/5 rounded-xl overflow-hidden flex flex-col justify-between animate-pulse ${
+                    isWide ? 'md:col-span-2' : 'col-span-1'
+                  }`}
+                >
+                  <div className={`w-full bg-[#161616] ${isWide ? 'aspect-[16/10] sm:aspect-[21/9]' : 'aspect-[16/10]'}`} />
+                  <div className="p-3.5 sm:p-6 bg-[#0f0f0f] flex flex-col gap-3">
+                    <div className="w-2/3 h-8 bg-white/5 rounded" />
+                    <div className="w-1/3 h-3 bg-white/5 rounded" />
+                    <div className="w-full h-4 bg-white/5 rounded mt-2" />
+                    <div className="w-4/5 h-4 bg-white/5 rounded" />
+                  </div>
+                </div>
+              );
+            })
+          ) : filteredProjects.length === 0 ? (
+            <div className="col-span-1 md:col-span-2 py-12 sm:py-20 text-center flex flex-col items-center justify-center border border-white/5 rounded-xl bg-[#0a0a0a]">
+              <span className="font-mono-code text-[#6B6862] text-xs uppercase mb-3">SYSTEM UPDATE</span>
+              <p className="font-space text-base sm:text-lg text-[#F2F0EC]">Projects are currently being updated from the database.</p>
+            </div>
+          ) : (
+            filteredProjects.map((project, index) => {
             const isHovered = hoveredProjectId === project.id;
             const isWide = index === 0 || index === 3; // Asymmetrical editorial magazine rhythm on desktop
 
@@ -224,7 +250,8 @@ export const SelectedWork: React.FC<SelectedWorkProps> = ({
 
               </div>
             );
-          })}
+            })
+          )}
         </div>
 
       </div>

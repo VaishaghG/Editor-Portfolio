@@ -22,7 +22,7 @@ export const Hero: React.FC<HeroProps> = ({
   playClick,
   playHover,
 }) => {
-  const { settings, profile } = usePortfolio();
+  const { settings, profile, isLoading } = usePortfolio();
   const containerRef = useRef<HTMLDivElement>(null);
   const heroTextRef = useRef<HTMLHeadingElement>(null);
   const videoCardRef = useRef<HTMLDivElement>(null);
@@ -213,31 +213,39 @@ export const Hero: React.FC<HeroProps> = ({
               {/* Aspect Ratio Box */}
               <div className="aspect-[16/10] sm:aspect-[16/11] lg:aspect-[4/5] relative overflow-hidden bg-[#161616]">
                 
-                {/* Fallback image (ensures immediate visibility while video buffers) */}
-                {posterUrl && (
-                  <img
-                    src={posterUrl}
-                    alt="2026 Showreel Preview"
-                    className="absolute inset-0 w-full h-full object-cover"
-                  />
-                )}
+                {isLoading ? (
+                  <div className="absolute inset-0 w-full h-full bg-[#161616] animate-pulse flex items-center justify-center">
+                    <span className="font-mono-code text-xs text-[#6B6862]">LOADING SHOWREEL...</span>
+                  </div>
+                ) : (
+                  <>
+                    {/* Fallback image (ensures immediate visibility while video buffers) */}
+                    {posterUrl && (
+                      <img
+                        src={posterUrl}
+                        alt="2026 Showreel Preview"
+                        className="absolute inset-0 w-full h-full object-cover"
+                      />
+                    )}
 
-                {/* Clean, Full-Visibility Looping Video */}
-                {videoUrl && (
-                  <video
-                    key={videoUrl}
-                    src={videoUrl}
-                    poster={posterUrl}
-                    autoPlay
-                    loop
-                    muted
-                    playsInline
-                    preload="auto"
-                    className="relative z-[1] w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                    onLoadedData={(e) => {
-                      e.currentTarget.play().catch(() => {});
-                    }}
-                  />
+                    {/* Clean, Full-Visibility Looping Video */}
+                    {videoUrl && (
+                      <video
+                        key={videoUrl}
+                        src={videoUrl}
+                        poster={posterUrl}
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                        preload="auto"
+                        className="relative z-[1] w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                        onLoadedData={(e) => {
+                          e.currentTarget.play().catch(() => {});
+                        }}
+                      />
+                    )}
+                  </>
                 )}
 
                 {/* Film HUD Overlay */}

@@ -1,5 +1,4 @@
 import React from 'react';
-import { METRICS as DEFAULT_METRICS } from '@/data/experience';
 import { CheckCircle, ArrowUpRight } from 'lucide-react';
 import { usePortfolio } from '@/context/PortfolioContext';
 
@@ -16,7 +15,7 @@ export const About: React.FC<AboutProps> = ({
   playClick,
   playHover,
 }) => {
-  const { profile, metrics } = usePortfolio();
+  const { profile } = usePortfolio();
 
   const specializations = profile?.specializations?.length > 0
     ? profile.specializations
@@ -27,8 +26,6 @@ export const About: React.FC<AboutProps> = ({
         'Kinetic Typography & Motion Graphics (After Effects)',
         'DaVinci Resolve Color Grading & Sound Polish',
       ];
-
-  const displayMetrics = metrics?.length > 0 ? metrics : DEFAULT_METRICS;
 
   return (
     <section id="about" className="relative py-10 sm:py-16 md:py-24 lg:py-32 editorial-border-b bg-[#080808] overflow-hidden">
@@ -158,31 +155,7 @@ export const About: React.FC<AboutProps> = ({
             </div>
 
           </div>
-
         </div>
-
-        {/* Proof Metrics Strip */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 sm:gap-6 mt-8 sm:mt-12 pt-6 sm:pt-10 editorial-border-t">
-          {displayMetrics.map((metric, idx) => (
-            <div
-              key={('id' in metric && (metric as any).id) ? (metric as any).id : idx}
-              className="bg-[#0f0f0f] border border-white/10 p-3 sm:p-5 rounded-xl flex flex-col justify-between"
-            >
-              <span className="font-bebas text-2xl sm:text-5xl md:text-6xl text-[#F2F0EC] tracking-tight mb-0.5">
-                {metric.value}
-              </span>
-              <div>
-                <span className="font-mono-code text-[9px] sm:text-[11px] text-[#E50914] font-bold block uppercase">
-                  {metric.label}
-                </span>
-                <span className="font-mono-code text-[8px] sm:text-[10px] text-[#6B6862] block mt-0.5">
-                  {metric.change}
-                </span>
-              </div>
-            </div>
-          ))}
-        </div>
-
       </div>
     </section>
   );
