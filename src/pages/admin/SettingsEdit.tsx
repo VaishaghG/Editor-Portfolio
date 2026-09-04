@@ -14,7 +14,7 @@ import { supabase, isSupabaseConfigured, uploadMediaFile } from '@/lib/supabase'
 import { DbSiteSettings } from '@/types/database';
 
 export const SettingsEdit: React.FC = () => {
-  const { settings, refreshData } = usePortfolio();
+  const { settings, projects, refreshData } = usePortfolio();
   const [formData, setFormData] = useState<DbSiteSettings>(settings);
   const [isSaving, setIsSaving] = useState(false);
   const [uploadProgress, setUploadProgress] = useState<{ [key: string]: boolean }>({});
@@ -253,69 +253,45 @@ export const SettingsEdit: React.FC = () => {
             <span className="text-[10px] text-[#9E9B93] font-normal font-mono-code">One-click presets below</span>
           </div>
 
-          {/* Quick Presets Bar */}
-          <div>
-            <label className="block text-[#9E9B93] uppercase text-[10px] mb-2 font-bold">
-              CINEMATIC HIGH-ENERGY PRESETS (CLICK TO APPLY)
-            </label>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-              <button
-                type="button"
-                onClick={() => setFormData({
-                  ...formData,
-                  hero_video_url: 'https://assets.mixkit.co/videos/preview/mixkit-tunnel-of-futuristic-neon-lights-42997-large.mp4',
-                  hero_poster_url: 'https://images.unsplash.com/photo-1511919884226-fd3cad34687c?auto=format&fit=crop&w=1200&q=80',
-                  showreel_url: 'https://assets.mixkit.co/videos/preview/mixkit-tunnel-of-futuristic-neon-lights-42997-large.mp4',
-                })}
-                className="p-2 bg-[#161616] hover:bg-[#E50914]/20 border border-white/10 hover:border-[#E50914] rounded text-left transition-all cursor-pointer group"
-              >
-                <span className="text-white group-hover:text-[#E50914] font-bold block text-[11px]">⚡ SPEED DRIFT</span>
-                <span className="text-[#6B6862] text-[9px] block">High Contrast Neon</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setFormData({
-                  ...formData,
-                  hero_video_url: 'https://assets.mixkit.co/videos/preview/mixkit-futuristic-city-with-neon-lights-and-flying-cars-42998-large.mp4',
-                  hero_poster_url: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1200&q=80',
-                  showreel_url: 'https://assets.mixkit.co/videos/preview/mixkit-futuristic-city-with-neon-lights-and-flying-cars-42998-large.mp4',
-                })}
-                className="p-2 bg-[#161616] hover:bg-[#E50914]/20 border border-white/10 hover:border-[#E50914] rounded text-left transition-all cursor-pointer group"
-              >
-                <span className="text-white group-hover:text-[#E50914] font-bold block text-[11px]">🏙️ CYBER METROPOLIS</span>
-                <span className="text-[#6B6862] text-[9px] block">4K Anamorphic City</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setFormData({
-                  ...formData,
-                  hero_video_url: 'https://assets.mixkit.co/videos/preview/mixkit-abstract-digital-connection-mesh-42999-large.mp4',
-                  hero_poster_url: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1200&q=80',
-                  showreel_url: 'https://assets.mixkit.co/videos/preview/mixkit-abstract-digital-connection-mesh-42999-large.mp4',
-                })}
-                className="p-2 bg-[#161616] hover:bg-[#E50914]/20 border border-white/10 hover:border-[#E50914] rounded text-left transition-all cursor-pointer group"
-              >
-                <span className="text-white group-hover:text-[#E50914] font-bold block text-[11px]">🔮 KINETIC MOTION</span>
-                <span className="text-[#6B6862] text-[9px] block">3D VFX & Typography</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setFormData({
-                  ...formData,
-                  hero_video_url: 'https://assets.mixkit.co/videos/preview/mixkit-dj-mixing-music-at-a-club-41484-large.mp4',
-                  hero_poster_url: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=1200&q=80',
-                  showreel_url: 'https://assets.mixkit.co/videos/preview/mixkit-dj-mixing-music-at-a-club-41484-large.mp4',
-                })}
-                className="p-2 bg-[#161616] hover:bg-[#E50914]/20 border border-white/10 hover:border-[#E50914] rounded text-left transition-all cursor-pointer group"
-              >
-                <span className="text-white group-hover:text-[#E50914] font-bold block text-[11px]">🎆 CONCERT RECAP</span>
-                <span className="text-[#6B6862] text-[9px] block">Live Lasers & Drops</span>
-              </button>
+          {/* Quick Project Media Selector */}
+          {projects.length > 0 && (
+            <div>
+              <label className="block text-[#9E9B93] uppercase text-[10px] mb-2 font-bold">
+                USE REAL CMS PROJECT FOR HERO MEDIA (CLICK TO APPLY)
+              </label>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+                {projects.slice(0, 6).map((proj) => (
+                  <button
+                    key={proj.id}
+                    type="button"
+                    onClick={() => setFormData({
+                      ...formData,
+                      hero_video_url: proj.videoUrl,
+                      hero_poster_url: proj.thumbnailUrl,
+                      showreel_url: proj.videoUrl,
+                    })}
+                    className="p-2.5 bg-[#161616] hover:bg-[#E50914]/20 border border-white/10 hover:border-[#E50914] rounded text-left transition-all cursor-pointer group flex items-center gap-2.5"
+                  >
+                    {proj.thumbnailUrl && (
+                      <img
+                        src={proj.thumbnailUrl}
+                        alt={proj.title}
+                        className="w-10 h-10 object-cover rounded shrink-0 border border-white/10"
+                      />
+                    )}
+                    <div className="overflow-hidden">
+                      <span className="text-white group-hover:text-[#E50914] font-bold block text-[11px] truncate">
+                        {proj.title}
+                      </span>
+                      <span className="text-[#6B6862] text-[9px] block uppercase truncate">
+                        {proj.category}
+                      </span>
+                    </div>
+                  </button>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
 
           <div>
             <label className="block text-[#9E9B93] uppercase text-[10px] mb-1">HERO BACKGROUND VIDEO URL</label>

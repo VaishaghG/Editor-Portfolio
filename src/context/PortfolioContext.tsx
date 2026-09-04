@@ -15,7 +15,7 @@ export const DEFAULT_PROFILE: DbProfile = {
   role_subtitle: 'POST-PRODUCTION LEAD',
   editor_id: 'VG-2026',
   short_bio: 'I am a freelance video editor and motion designer obsessed with the craft of visual storytelling. Whether it\'s cutting a high-octane 30-second commercial reel that converts, or editing a nuanced brand documentary, I treat every frame with mathematical precision.',
-  long_bio: 'My process combines non-linear editing mastery, dynamic audio engineering, bespoke motion graphics, and ACES-standard color grading to ensure your footage looks like an international cinema release.',
+  long_bio: 'My process combines non-linear editing mastery, dynamic audio engineering, bespoke motion graphics, and clean color grading to ensure your footage looks like an international cinema release.',
   philosophy_quote: 'Pacing is emotion. Every millisecond between cuts dictates how the viewer feels, remembers, and reacts.',
   location: 'INDIA (IST / REMOTE)',
   availability: 'AVAILABLE WORLDWIDE',
@@ -34,7 +34,7 @@ export const DEFAULT_PROFILE: DbProfile = {
     'Commercial Brand Films & Product Spots',
     'Corporate Storytelling & Conference Recaps',
     'Kinetic Typography & Motion Graphics (After Effects)',
-    'DaVinci Resolve Color Grading & Sound Polish',
+    'Adobe Premiere Pro & Lightroom Color Polish',
   ],
 };
 
@@ -49,10 +49,10 @@ export const DEFAULT_SETTINGS: DbSiteSettings = {
   hero_heading_line3: 'INTO',
   hero_heading_line4: 'STORIES.',
   hero_manifesto: 'Turning raw, chaotic footage into high-retention stories that leave an indelible mark on the screen.',
-  hero_video_url: 'https://assets.mixkit.co/videos/preview/mixkit-futuristic-city-with-neon-lights-and-flying-cars-42998-large.mp4',
-  hero_poster_url: 'https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=1200&q=80',
+  hero_video_url: '',
+  hero_poster_url: '',
   hero_cta_text: 'WATCH 2026 SHOWREEL',
-  showreel_url: 'https://assets.mixkit.co/videos/preview/mixkit-futuristic-city-with-neon-lights-and-flying-cars-42998-large.mp4',
+  showreel_url: '',
   footer_headline: 'VAISHAGH G.',
   footer_manifesto: 'Turning raw, unstructured footage into cinematic visual experiences that captivate audiences and drive action.',
 };
@@ -250,12 +250,12 @@ export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     fetchData();
   }, [fetchData]);
 
-  // Derive public lists (without fallback to static constants to ensure DB is the source of truth)
+  // Derive public lists (Projects use DB as single source of truth without template fallbacks)
   const projects: Project[] = allProjects.filter((p) => p.published).map(mapDbProjectToProject);
-  const services: Service[] = allServices.filter((s) => s.published).map(mapDbServiceToService);
-  const processSteps: ProcessStep[] = allProcessSteps.filter((p) => p.published).map(mapDbProcessToProcess);
-  const tools: ToolItem[] = allTools.filter((t) => t.published).map(mapDbToolToTool);
-  const timeline: TimelineItem[] = allExperience.filter((e) => e.published).map(mapDbExperienceToTimeline);
+  const services: Service[] = allServices.length > 0 ? allServices.filter((s) => s.published).map(mapDbServiceToService) : DEFAULT_SERVICES;
+  const processSteps: ProcessStep[] = allProcessSteps.length > 0 ? allProcessSteps.filter((p) => p.published).map(mapDbProcessToProcess) : DEFAULT_PROCESS_STEPS;
+  const tools: ToolItem[] = allTools.length > 0 ? allTools.filter((t) => t.published).map(mapDbToolToTool) : DEFAULT_TOOLS;
+  const timeline: TimelineItem[] = allExperience.length > 0 ? allExperience.filter((e) => e.published).map(mapDbExperienceToTimeline) : DEFAULT_TIMELINE;
 
   return (
     <PortfolioContext.Provider

@@ -7,36 +7,10 @@
     
     <!-- Primary Meta Tags -->
     <title>Vaishagh G. | Video Editor & Motion Designer</title>
-    <!-- Error Logger for Debugging -->
-    <script>
-      const originalConsoleError = console.error;
-      console.error = function(...args) {
-        let msg = '';
-        try {
-          msg = args.map(a => {
-            if (a instanceof Error) return a.stack || a.message;
-            return typeof a === 'object' ? JSON.stringify(a, (k,v) => {
-              if (k !== '' && v === a) return '[Circular]';
-              return v;
-            }) : String(a);
-          }).join(' ');
-        } catch(err) {
-          msg = 'Could not stringify error: ' + err.message;
-        }
-        fetch('/log-error', { method: 'POST', body: 'CONSOLE ERROR: ' + msg });
-        originalConsoleError.apply(console, args);
-      };
-      window.addEventListener('error', function(e) {
-        fetch('/log-error', { method: 'POST', body: 'WINDOW ERROR: ' + e.message + '\n' + (e.error ? e.error.stack : '') });
-      });
-      window.addEventListener('unhandledrejection', function(e) {
-        fetch('/log-error', { method: 'POST', body: 'Promise Rejection: ' + e.reason });
-      });
-    </script>
     <meta name="title" content="VAISHAGH G. — Freelance Video Editor & Motion Designer" />
     <meta name="description" content="Cinematic video editor and motion designer turning raw footage into unforgettable stories. Specializing in high-retention short-form, commercial brand films, and motion graphics." />
     <meta name="theme-color" content="#080808" />
-    <meta name="keywords" content="Video Editor, Motion Designer, Freelance Video Editor, Cinematic Showreel, DaVinci Resolve, Adobe Premiere Pro, After Effects, Short-form Video Editor, India Video Editor" />
+    <meta name="keywords" content="Video Editor, Motion Designer, Freelance Video Editor, Cinematic Showreel, Adobe Premiere Pro, Adobe After Effects, Adobe Lightroom, Short-form Video Editor, India Video Editor" />
     <meta name="author" content="Vaishagh G." />
 
     <!-- Open Graph / Facebook -->
@@ -50,6 +24,17 @@
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
   </head>
   <body class="bg-[#080808] text-[#F2F0EC] antialiased selection:bg-[#E50914] selection:text-white overflow-x-hidden">
+    <!-- Netlify Form Detection for SPA (Vite/React) -->
+    <form name="contact" netlify netlify-honeypot="bot-field" hidden>
+      <input type="hidden" name="form-name" value="contact" />
+      <input type="text" name="bot-field" />
+      <input type="text" name="name" />
+      <input type="email" name="email" />
+      <input type="text" name="projectType" />
+      <input type="text" name="timeline" />
+      <textarea name="details"></textarea>
+    </form>
+
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

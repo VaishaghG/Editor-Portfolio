@@ -22,6 +22,13 @@ export const CinemaModal: React.FC<CinemaModalProps> = ({
   const [isMuted, setIsMuted] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [isVideoReady, setIsVideoReady] = useState(false);
+  const [isBuffering, setIsBuffering] = useState(false);
+
+  useEffect(() => {
+    setIsVideoReady(false);
+    setIsBuffering(false);
+  }, [project?.videoUrl]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -139,6 +146,17 @@ export const CinemaModal: React.FC<CinemaModalProps> = ({
 
         {/* Video Player & Stage */}
         <div className="relative bg-black w-full min-h-[260px] max-h-[48vh] sm:max-h-[58vh] flex items-center justify-center overflow-hidden group shrink-0">
+          {/* Base Real Supabase Thumbnail Underlay */}
+          {project.thumbnailUrl && (
+            <img
+              src={project.thumbnailUrl}
+              alt={project.title}
+              className={`absolute inset-0 w-full h-full object-contain transition-opacity duration-700 ${
+                isVideoReady ? 'opacity-0 pointer-events-none' : 'opacity-90 blur-[1px]'
+              }`}
+            />
+          )}
+
           <video
             ref={videoRef}
             src={project.videoUrl}
@@ -148,10 +166,36 @@ export const CinemaModal: React.FC<CinemaModalProps> = ({
             playsInline
             muted={isMuted}
             onTimeUpdate={handleTimeUpdate}
-            onLoadedMetadata={handleTimeUpdate}
-            className="w-full h-full object-contain"
+            onLoadedMetadata={() => {
+              handleTimeUpdate();
+              setIsVideoReady(true);
+            }}
+            onCanPlay={() => {
+              setIsVideoReady(true);
+              setIsBuffering(false);
+            }}
+            onWaiting={() => setIsBuffering(true)}
+            onPlaying={() => {
+              setIsVideoReady(true);
+              setIsBuffering(false);
+            }}
+            className={`w-full h-full object-contain transition-opacity duration-700 ${
+              isVideoReady ? 'opacity-100' : 'opacity-0'
+            }`}
             onClick={togglePlay}
           />
+
+          {/* Buffering Indicator */}
+          {(!isVideoReady || isBuffering) && project.videoUrl && (
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
+              <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/80 border border-white/10 backdrop-blur-md shadow-2xl">
+                <span className="w-2 h-2 rounded-full bg-[#E50914] animate-pulse" />
+                <span className="font-mono-code text-[10px] text-white/90 tracking-widest uppercase">
+                  {isBuffering ? 'BUFFERING...' : 'LOADING VIDEO...'}
+                </span>
+              </div>
+            </div>
+          )}
 
           {/* Center Play Button Overlay on Hover/Pause */}
           {!isPlaying && (

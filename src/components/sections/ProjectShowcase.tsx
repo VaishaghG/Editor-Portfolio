@@ -4,6 +4,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Project } from '@/data/projects';
 import { Play, ArrowUpRight, ChevronRight, ChevronLeft, Film, Sparkles } from 'lucide-react';
 import { usePortfolio } from '@/context/PortfolioContext';
+import { CinematicVideoPlayer } from '@/components/common/CinematicVideoPlayer';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -269,55 +270,43 @@ export const ProjectShowcase: React.FC<ProjectShowcaseProps> = ({
                       onMouseLeave={onMouseLeave}
                       className="relative aspect-[9/16] h-[52vh] max-h-[480px] w-auto rounded-xl overflow-hidden cursor-pointer border-2 border-white/15 group-hover:border-[#E50914] transition-all duration-500 shadow-[0_10px_30px_rgba(0,0,0,0.8)] group-hover:shadow-[0_0_30px_rgba(229,9,20,0.3)] bg-black"
                     >
-                      {/* Video Poster Image Fallback */}
-                      <img
-                        src={project.thumbnailUrl}
+                      <CinematicVideoPlayer
+                        src={project.videoUrl}
+                        poster={project.thumbnailUrl}
                         alt={project.title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-90 group-hover:opacity-40"
-                      />
-
-                      {/* Video Element */}
-                      {project.videoUrl && (
-                        <video
-                          src={project.videoUrl}
-                          poster={project.thumbnailUrl}
-                          muted
-                          loop
-                          autoPlay
-                          playsInline
-                          preload="metadata"
-                          className="absolute inset-0 w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity"
-                        />
-                      )}
-
-                      {/* 9:16 Cinematic HUD Overlays */}
-                      <div className="absolute inset-0 p-3 flex flex-col justify-between pointer-events-none">
-                        {/* Top HUD stamps */}
-                        <div className="flex justify-between items-start font-mono-code text-[9px] text-white/90">
-                          <div className="bg-black/80 backdrop-blur-md px-2 py-0.5 rounded border border-white/10 flex items-center gap-1.5">
-                            <span className="w-1.5 h-1.5 rounded-full bg-[#E50914] animate-pulse-red" />
-                            <span>9:16 REEL {project.number}</span>
+                        aspectRatioClass="w-full h-full"
+                        priority={idx === 0}
+                        hoverScale={true}
+                      >
+                        {/* 9:16 Cinematic HUD Overlays */}
+                        <div className="absolute inset-0 p-3 flex flex-col justify-between pointer-events-none z-20">
+                          {/* Top HUD stamps */}
+                          <div className="flex justify-between items-start font-mono-code text-[9px] text-white/90">
+                            <div className="bg-black/80 backdrop-blur-md px-2 py-0.5 rounded border border-white/10 flex items-center gap-1.5">
+                              <span className="w-1.5 h-1.5 rounded-full bg-[#E50914] animate-pulse-red" />
+                              <span>9:16 REEL {project.number}</span>
+                            </div>
+                            <div className="bg-black/80 backdrop-blur-md px-1.5 py-0.5 rounded border border-white/10 text-[#E50914] font-bold">
+                              {project.fps || '60 FPS'}
+                            </div>
                           </div>
-                          <div className="bg-black/80 backdrop-blur-md px-1.5 py-0.5 rounded border border-white/10 text-[#E50914] font-bold">
-                            {project.fps || '60 FPS'}
-                          </div>
-                        </div>
 
-                        {/* Center Hover Play Button */}
-                        <div className="self-center p-3 rounded-full bg-[#E50914] text-white opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300 shadow-[0_0_25px_rgba(229,9,20,0.8)]">
-                          <Play className="w-5 h-5 fill-current ml-0.5" />
-                        </div>
-
-                        {/* Bottom HUD stamps */}
-                        <div className="flex justify-between items-end font-mono-code text-[9px] text-white/80">
-                          <div className="bg-black/80 backdrop-blur-md px-1.5 py-0.5 rounded border border-white/10">
-                            TC: 00:00:{project.duration || '00:15'}
+                          {/* Center Hover Play Button */}
+                          <div className="self-center p-3 rounded-full bg-[#E50914] text-white opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300 shadow-[0_0_25px_rgba(229,9,20,0.8)]">
+                            <Play className="w-5 h-5 fill-current ml-0.5" />
                           </div>
-                          <div className="bg-black/80 backdrop-blur-md px-1.5 py-0.5 rounded border border-white/10 text-emerald-400 font-bold flex items-center gap-1">
-                            <span>4K MASTER</span>
+
+                          {/* Bottom HUD stamps */}
+                          <div className="flex justify-between items-end font-mono-code text-[9px] text-white/80">
+                            <div className="bg-black/80 backdrop-blur-md px-1.5 py-0.5 rounded border border-white/10">
+                              TC: 00:00:{project.duration || '00:15'}
+                            </div>
+                            <div className="bg-black/80 backdrop-blur-md px-1.5 py-0.5 rounded border border-white/10 text-emerald-400 font-bold flex items-center gap-1">
+                              <span>4K MASTER</span>
+                            </div>
                           </div>
                         </div>
-                      </div>
+                      </CinematicVideoPlayer>
                     </div>
                   </div>
 
@@ -491,50 +480,40 @@ export const ProjectShowcase: React.FC<ProjectShowcaseProps> = ({
                     }}
                     className="relative aspect-[9/16] max-h-[44vh] sm:max-h-[48vh] w-auto mx-auto rounded-xl overflow-hidden cursor-pointer border border-white/15 bg-black mb-3 active:scale-[0.99] transition-transform shadow-lg"
                   >
-                    <img
-                      src={project.thumbnailUrl}
+                    <CinematicVideoPlayer
+                      src={project.videoUrl}
+                      poster={project.thumbnailUrl}
                       alt={project.title}
-                      className="w-full h-full object-cover opacity-90"
-                      loading="lazy"
-                    />
-                    {project.videoUrl && (
-                      <video
-                        src={project.videoUrl}
-                        poster={project.thumbnailUrl}
-                        muted
-                        loop
-                        autoPlay
-                        playsInline
-                        preload="metadata"
-                        className="absolute inset-0 w-full h-full object-cover opacity-90"
-                      />
-                    )}
-
-                    {/* Compact HUD Stamps */}
-                    <div className="absolute inset-0 p-2.5 flex flex-col justify-between pointer-events-none font-mono-code text-[9px] text-white/90">
-                      <div className="flex justify-between items-start">
-                        <div className="bg-black/80 backdrop-blur-md px-2 py-0.5 rounded border border-white/10 flex items-center gap-1">
-                          <span className="w-1.5 h-1.5 rounded-full bg-[#E50914] animate-pulse" />
-                          <span>9:16 REEL</span>
+                      aspectRatioClass="w-full h-full"
+                      priority={idx === 0}
+                      hoverScale={false}
+                    >
+                      {/* Compact HUD Stamps */}
+                      <div className="absolute inset-0 p-2.5 flex flex-col justify-between pointer-events-none font-mono-code text-[9px] text-white/90 z-20">
+                        <div className="flex justify-between items-start">
+                          <div className="bg-black/80 backdrop-blur-md px-2 py-0.5 rounded border border-white/10 flex items-center gap-1">
+                            <span className="w-1.5 h-1.5 rounded-full bg-[#E50914] animate-pulse" />
+                            <span>9:16 REEL</span>
+                          </div>
+                          <div className="bg-black/80 backdrop-blur-md px-1.5 py-0.5 rounded border border-white/10 text-[#E50914]">
+                            {project.fps || '60 FPS'}
+                          </div>
                         </div>
-                        <div className="bg-black/80 backdrop-blur-md px-1.5 py-0.5 rounded border border-white/10 text-[#E50914]">
-                          {project.fps || '60 FPS'}
+
+                        <div className="self-center p-2.5 rounded-full bg-[#E50914] text-white shadow-[0_0_15px_rgba(229,9,20,0.6)]">
+                          <Play className="w-3.5 h-3.5 fill-current ml-0.5" />
+                        </div>
+
+                        <div className="flex justify-between items-end">
+                          <div className="bg-black/80 backdrop-blur-md px-1.5 py-0.5 rounded border border-white/10">
+                            TC {project.duration || '00:15'}
+                          </div>
+                          <div className="bg-black/80 backdrop-blur-md px-1.5 py-0.5 rounded border border-white/10 text-[#E50914] font-bold">
+                            TAP TO PLAY
+                          </div>
                         </div>
                       </div>
-
-                      <div className="self-center p-2.5 rounded-full bg-[#E50914] text-white shadow-[0_0_15px_rgba(229,9,20,0.6)]">
-                        <Play className="w-3.5 h-3.5 fill-current ml-0.5" />
-                      </div>
-
-                      <div className="flex justify-between items-end">
-                        <div className="bg-black/80 backdrop-blur-md px-1.5 py-0.5 rounded border border-white/10">
-                          TC {project.duration || '00:15'}
-                        </div>
-                        <div className="bg-black/80 backdrop-blur-md px-1.5 py-0.5 rounded border border-white/10 text-[#E50914] font-bold">
-                          TAP TO PLAY
-                        </div>
-                      </div>
-                    </div>
+                    </CinematicVideoPlayer>
                   </div>
 
                   {/* Title & Subtitle */}

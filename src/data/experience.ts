@@ -20,10 +20,10 @@ export const TIMELINE: TimelineItem[] = [
     type: "FREELANCE",
     highlights: [
       "Partnering directly with founders, brand agencies, and content creators worldwide to produce cinematic commercial edits and high-retention social campaigns.",
-      "Delivered over 120+ finished video cuts with an aggregate 50M+ organic views across Instagram, YouTube, and digital ad campaigns.",
-      "Architected custom automated motion templates (MOGRTs) that shortened client post-production turnaround by 40%."
+      "Specializing in high-retention short-form reels, commercial cuts, and creative post-production storytelling.",
+      "Architected custom automated motion templates (MOGRTs) that shortened post-production turnaround."
     ],
-    toolsUsed: ["Premiere Pro", "After Effects", "DaVinci Resolve", "Photoshop"],
+    toolsUsed: ["Adobe Premiere Pro", "Adobe After Effects", "Adobe Lightroom"],
     status: "CURRENTLY ACTIVE"
   },
   {
@@ -35,7 +35,7 @@ export const TIMELINE: TimelineItem[] = [
     type: "EDUCATION",
     highlights: [
       "Pursuing postgraduate studies in Computer Science, focusing on Software Architecture, Digital Media Processing, and Computational Graphics.",
-      "Synthesizing technical problem-solving with high-end creative post-production workflows and video rendering pipelines."
+      "Synthesizing technical problem-solving with creative post-production workflows and video rendering pipelines."
     ],
     toolsUsed: ["Algorithms", "Web Technologies", "Digital Signal Processing"],
     status: "IN PROGRESS"
@@ -43,16 +43,16 @@ export const TIMELINE: TimelineItem[] = [
   {
     id: "content-lead-past",
     period: "2024 — 2026",
-    role: "LEAD VIDEO EDITOR & CONTENT STRATEGIST",
-    organization: "DIGITAL MEDIA & CREATIVE LABS",
+    role: "VIDEO EDITOR & MOTION DESIGNER",
+    organization: "DIGITAL MEDIA & CREATIVE PRACTICE",
     location: "INDIA",
     type: "AGENCY / COLLAB",
     highlights: [
-      "Led end-to-end post-production for fast-turnaround corporate reels, product launches, and brand summit aftermovies.",
-      "Managed offline assembly, color grading pipelines, and sound design tracks across multicamera setups.",
-      "Mentored junior editors on rhythm pacing, speed ramps, and keyframe easing in After Effects."
+      "Created fast-turnaround video edits, corporate reels, and event recaps.",
+      "Managed offline assembly, color balance, and sound design across multicamera setups.",
+      "Crafted dynamic rhythm pacing, speed ramps, and keyframe motion graphics in After Effects."
     ],
-    toolsUsed: ["Premiere Pro", "After Effects", "Audition", "Photoshop"]
+    toolsUsed: ["Adobe Premiere Pro", "Adobe After Effects", "Adobe Lightroom"]
   },
   {
     id: "bachelor-degree",
@@ -70,8 +70,8 @@ export const TIMELINE: TimelineItem[] = [
 ];
 
 export const METRICS = [
-  { label: "ORGANIC VIEWS GENERATED", value: "50M+", change: "+12M in 2025/26" },
-  { label: "COMMERCIAL CUTS DELIVERED", value: "120+", change: "Zero missed deadlines" },
-  { label: "AVERAGE RETENTION BOOST", value: "82%", change: "Above platform baseline" },
-  { label: "YEARS OF FRAME OBSESSION", value: "4+", change: "Precision in every cut" },
+  { label: "YEARS EDITING", value: "03+", change: "Hands-on experience with video editing and creative post-production." },
+  { label: "CREATIVE TOOLS", value: "03", change: "Adobe Premiere Pro, After Effects and Lightroom." },
+  { label: "VERTICAL-FIRST", value: "9:16", change: "Built for reels, short-form content and social-first storytelling." },
+  { label: "DELIVERY READY", value: "4K", change: "High-resolution exports with attention to quality and detail." }
 ];

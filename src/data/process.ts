@@ -79,12 +79,12 @@ export const PROCESS_STEPS: ProcessStep[] = [
     number: "05",
     phase: "PHASE 05 // SOUND & COLOR GRADE",
     title: "POLISH",
-    description: "The cinema standard finish. Custom Foley sound effects, sub-bass impacts, vocal equalization, and precise DaVinci Resolve color grading.",
+    description: "The cinema standard finish. Custom sound effects, sub-bass impacts, vocal equalization, and precise color grading.",
     timelineTrack: "A1-A3 / COLOR LUT",
     timelineTrackColor: "#E50914",
     durationPercent: 15,
     tasks: [
-      "DaVinci Resolve color grade & film LUT",
+      "Color grading & film tone balance",
       "Dialogue cleanup & noise reduction",
       "Layered SFX (whooshes, hits, ambient foley)",
       "Master loudness normalization (-14 LUFS)"

@@ -3,11 +3,12 @@ import gsap from 'gsap';
 import { Play, ArrowDown, Disc3 } from 'lucide-react';
 import { TimecodeHUD } from '@/components/common/TimecodeHUD';
 import { usePortfolio } from '@/context/PortfolioContext';
+import { CinematicVideoPlayer } from '@/components/common/CinematicVideoPlayer';
 
 interface HeroProps {
   onOpenReel: () => void;
   onExploreWork: () => void;
-  onOpenContact: () => void;
+  onOpenContact?: () => void;
   onMouseEnterProject?: (text: string) => void;
   onMouseLeave?: () => void;
   playClick?: () => void;
@@ -17,56 +18,67 @@ interface HeroProps {
 export const Hero: React.FC<HeroProps> = ({
   onOpenReel,
   onExploreWork,
+  onOpenContact,
   onMouseEnterProject,
   onMouseLeave,
   playClick,
   playHover,
 }) => {
-  const { settings, profile, isLoading } = usePortfolio();
+  const { settings, profile, projects, isLoading } = usePortfolio();
   const containerRef = useRef<HTMLDivElement>(null);
   const heroTextRef = useRef<HTMLHeadingElement>(null);
   const videoCardRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    // Only run animations if we are not loading
+    if (isLoading) return;
+
     const ctx = gsap.context(() => {
-      // Intro animations
-      gsap.from('.hero-badge-anim', {
+      // Setup initial states
+      gsap.set(['.hero-title-line', '.hero-badge', '.hero-desc', '.hero-cta', '.hero-footer-item'], {
+        y: 40,
         opacity: 0,
-        y: 20,
-        duration: 0.8,
-        stagger: 0.1,
-        ease: 'power3.out',
-        delay: 0.2,
       });
 
-      gsap.from('.hero-title-line', {
-        opacity: 0,
-        y: 80,
-        skewY: 4,
-        duration: 1.1,
+      // Animate in sequence
+      const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+
+      tl.to('.hero-title-line', {
+        y: 0,
+        opacity: 1,
+        duration: 0.9,
         stagger: 0.12,
-        ease: 'power4.out',
-        delay: 0.3,
-      });
+        delay: 0.1,
+      })
+      .to('.hero-desc', {
+        y: 0,
+        opacity: 1,
+        duration: 0.7,
+      }, '-=0.5')
+      .to('.hero-cta', {
+        y: 0,
+        opacity: 1,
+        duration: 0.6,
+        stagger: 0.1,
+      }, '-=0.4')
+      .to('.hero-footer-item', {
+        y: 0,
+        opacity: 1,
+        duration: 0.6,
+        stagger: 0.08,
+      }, '-=0.3');
 
+      // Video card entrance
       if (videoCardRef.current) {
         gsap.fromTo(
           videoCardRef.current,
-          { opacity: 0, y: 40, scale: 0.95 },
-          {
-            opacity: 1,
-            y: 0,
-            scale: 1,
-            duration: 0.9,
-            ease: 'power3.out',
-            delay: 0.3,
-            clearProps: 'opacity,transform',
-          }
+          { scale: 0.95, opacity: 0, y: 30 },
+          { scale: 1, opacity: 1, y: 0, duration: 1, ease: 'power2.out', delay: 0.3 }
         );
       }
 
-      gsap.from('.hero-meta-anim', {
-        opacity: 0,
+      // Small floating animation for subtle depth
+      gsap.to('.hero-badge-anim', {
         y: 30,
         duration: 0.8,
         stagger: 0.1,
@@ -76,10 +88,11 @@ export const Hero: React.FC<HeroProps> = ({
     }, containerRef);
 
     return () => ctx.revert();
-  }, []);
+  }, [isLoading]);
 
-  const videoUrl = settings?.hero_video_url || 'https://assets.mixkit.co/videos/preview/mixkit-futuristic-city-with-neon-lights-and-flying-cars-42998-large.mp4';
-  const posterUrl = settings?.hero_poster_url || 'https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=1200&q=80';
+  // Single Source of Truth: Use CMS site_settings or first CMS project (never mixkit template videos)
+  const videoUrl = settings?.hero_video_url || (projects.length > 0 ? projects[0]?.videoUrl : null);
+  const posterUrl = settings?.hero_poster_url || (projects.length > 0 ? projects[0]?.thumbnailUrl : null);
 
   return (
     <section
@@ -212,40 +225,19 @@ export const Hero: React.FC<HeroProps> = ({
             >
               {/* Aspect Ratio Box */}
               <div className="aspect-[16/10] sm:aspect-[16/11] lg:aspect-[4/5] relative overflow-hidden bg-[#161616]">
-                
                 {isLoading ? (
                   <div className="absolute inset-0 w-full h-full bg-[#161616] animate-pulse flex items-center justify-center">
                     <span className="font-mono-code text-xs text-[#6B6862]">LOADING SHOWREEL...</span>
                   </div>
                 ) : (
-                  <>
-                    {/* Fallback image (ensures immediate visibility while video buffers) */}
-                    {posterUrl && (
-                      <img
-                        src={posterUrl}
-                        alt="2026 Showreel Preview"
-                        className="absolute inset-0 w-full h-full object-cover"
-                      />
-                    )}
-
-                    {/* Clean, Full-Visibility Looping Video */}
-                    {videoUrl && (
-                      <video
-                        key={videoUrl}
-                        src={videoUrl}
-                        poster={posterUrl}
-                        autoPlay
-                        loop
-                        muted
-                        playsInline
-                        preload="auto"
-                        className="relative z-[1] w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                        onLoadedData={(e) => {
-                          e.currentTarget.play().catch(() => {});
-                        }}
-                      />
-                    )}
-                  </>
+                  <CinematicVideoPlayer
+                    src={videoUrl}
+                    poster={posterUrl}
+                    alt="2026 Showreel Preview"
+                    aspectRatioClass="w-full h-full"
+                    priority={true}
+                    hoverScale={true}
+                  />
                 )}
 
                 {/* Film HUD Overlay */}

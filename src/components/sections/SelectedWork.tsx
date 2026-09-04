@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Project } from '@/data/projects';
 import { Play, ArrowUpRight } from 'lucide-react';
 import { usePortfolio } from '@/context/PortfolioContext';
+import { CinematicVideoPlayer } from '@/components/common/CinematicVideoPlayer';
 
 interface SelectedWorkProps {
   onSelectProject: (project: Project) => void;
@@ -139,26 +140,12 @@ export const SelectedWork: React.FC<SelectedWorkProps> = ({
                     isWide ? 'aspect-[16/10] sm:aspect-[21/9]' : 'aspect-[16/10]'
                   }`}
                 >
-                  {/* Poster Image */}
-                  <img
-                    src={project.thumbnailUrl}
+                  <CinematicVideoPlayer
+                    src={isHovered ? project.videoUrl : null}
+                    poster={project.thumbnailUrl}
                     alt={project.title}
-                    className={`w-full h-full object-cover transition-transform duration-700 ${
-                      isHovered ? 'scale-105 opacity-20' : 'opacity-85'
-                    }`}
-                    loading="lazy"
-                  />
-
-                  {/* Video preview on hover */}
-                  <video
-                    src={project.videoUrl}
-                    muted
-                    loop
-                    playsInline
-                    autoPlay={isHovered}
-                    className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${
-                      isHovered ? 'opacity-100 scale-105' : 'opacity-0 pointer-events-none'
-                    }`}
+                    aspectRatioClass="w-full h-full"
+                    hoverScale={true}
                   />
 
                   {/* Editorial Film Frame Overlay */}

@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import confetti from 'canvas-confetti';
-import { Phone, Copy, Check, Send, ArrowUpRight, Clock } from 'lucide-react';
+import { Phone, Copy, Check, Send, ArrowUpRight, Clock, Loader2, AlertCircle } from 'lucide-react';
 import { InstagramIcon } from '@/components/common/Icons';
 import { useMagnetic } from '@/hooks/useMagnetic';
 import { usePortfolio } from '@/context/PortfolioContext';
@@ -25,12 +25,21 @@ export const Contact: React.FC<ContactProps> = ({
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    projectType: initialService || 'Commercial Edit',
-    budget: '₹25,000 - ₹50,000 / $500 - $1,000',
-    timeline: 'Within 2 Weeks',
+    projectType: initialService || 'Commercial / Brand Film',
+    timeline: 'Within 1 - 2 Weeks',
     details: '',
   });
+  const [botField, setBotField] = useState('');
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  // Sync initialService when updated (e.g. from modal "Request Similar Edit")
+  useEffect(() => {
+    if (initialService) {
+      setFormData((prev) => ({ ...prev, projectType: initialService }));
+    }
+  }, [initialService]);
 
   const magneticBtnRef = useMagnetic<HTMLButtonElement>(0.4);
 
@@ -46,18 +55,60 @@ export const Contact: React.FC<ContactProps> = ({
     setTimeout(() => setCopiedEmail(false), 2500);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     playClick?.();
-    setSubmitted(true);
 
-    // Trigger celebratory confetti
-    confetti({
-      particleCount: 80,
-      spread: 70,
-      origin: { y: 0.7 },
-      colors: ['#E50914', '#F2F0EC', '#FF2A2A', '#ffffff'],
-    });
+    // Spam honeypot trap
+    if (botField) {
+      setSubmitted(true);
+      return;
+    }
+
+    setIsSubmitting(true);
+    setErrorMessage(null);
+
+    try {
+      if (import.meta.env.DEV) {
+        // In local development, simulate successful transmission without Netlify backend
+        console.info('[DEV] Netlify form simulated submission:', formData);
+        await new Promise((resolve) => setTimeout(resolve, 800));
+      } else {
+        const response = await fetch('/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: new URLSearchParams({
+            'form-name': 'contact',
+            name: formData.name,
+            email: formData.email,
+            projectType: formData.projectType,
+            timeline: formData.timeline,
+            details: formData.details,
+          }).toString(),
+        });
+
+        if (!response.ok) {
+          throw new Error(`Submission failed with status: ${response.status}`);
+        }
+      }
+
+      setSubmitted(true);
+
+      // Trigger celebratory confetti
+      confetti({
+        particleCount: 80,
+        spread: 70,
+        origin: { y: 0.7 },
+        colors: ['#E50914', '#F2F0EC', '#FF2A2A', '#ffffff'],
+      });
+    } catch (err: any) {
+      console.error('Netlify form submission error:', err);
+      setErrorMessage(
+        'Submission could not be delivered automatically. Please retry or click below to open your email.'
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -175,17 +226,54 @@ export const Contact: React.FC<ContactProps> = ({
                 </button>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4 font-mono-code text-xs">
+              <form
+                name="contact"
+                method="POST"
+                data-netlify="true"
+                data-netlify-honeypot="bot-field"
+                onSubmit={handleSubmit}
+                className="space-y-3 sm:space-y-4 font-mono-code text-xs"
+              >
+                {/* Netlify form identification and honeypot */}
+                <input type="hidden" name="form-name" value="contact" />
+                <p className="hidden" aria-hidden="true">
+                  <label>
+                    Don't fill this out if you're human:{' '}
+                    <input
+                      name="bot-field"
+                      tabIndex={-1}
+                      value={botField}
+                      onChange={(e) => setBotField(e.target.value)}
+                    />
+                  </label>
+                </p>
+
                 <div className="border-b border-white/10 pb-2 flex justify-between items-center text-[#6B6862]">
                   <span>START A PROJECT // COMMISSION BRIEF</span>
                   <span className="text-[#E50914] font-bold">● READY</span>
                 </div>
+
+                {errorMessage && (
+                  <div className="p-3 rounded bg-red-950/70 border border-[#E50914] text-white text-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2.5">
+                    <div className="flex items-center gap-2">
+                      <AlertCircle className="w-4 h-4 text-[#E50914] shrink-0" />
+                      <span>{errorMessage}</span>
+                    </div>
+                    <a
+                      href={`mailto:${emailToUse}?subject=${encodeURIComponent('Project Inquiry: ' + formData.projectType)}&body=${encodeURIComponent(`Name: ${formData.name}\nEmail: ${formData.email}\nProject Type: ${formData.projectType}\nTimeline: ${formData.timeline}\nDetails: ${formData.details}`)}`}
+                      className="px-3 py-1 bg-[#E50914] hover:bg-[#FF2A2A] rounded text-[10px] font-mono-code font-bold uppercase tracking-wider text-white shrink-0"
+                    >
+                      Direct Email &rarr;
+                    </a>
+                  </div>
+                )}
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-4 pt-1">
                   <div>
                     <label className="block text-[#6B6862] text-[9px] sm:text-[10px] uppercase mb-1 font-medium">YOUR NAME</label>
                     <input
                       type="text"
+                      name="name"
                       required
                       placeholder="e.g. Alex Miller"
                       value={formData.name}
@@ -198,6 +286,7 @@ export const Contact: React.FC<ContactProps> = ({
                     <label className="block text-[#6B6862] text-[9px] sm:text-[10px] uppercase mb-1 font-medium">YOUR EMAIL</label>
                     <input
                       type="email"
+                      name="email"
                       required
                       placeholder="e.g. alex@brand.com"
                       value={formData.email}
@@ -211,10 +300,14 @@ export const Contact: React.FC<ContactProps> = ({
                   <div>
                     <label className="block text-[#6B6862] text-[9px] sm:text-[10px] uppercase mb-1 font-medium">PROJECT TYPE</label>
                     <select
+                      name="projectType"
                       value={formData.projectType}
                       onChange={(e) => setFormData({ ...formData, projectType: e.target.value })}
                       className="w-full min-h-[44px] bg-[#161616] border border-white/10 focus:border-[#E50914] rounded p-2.5 sm:p-3 text-white outline-none transition-colors"
                     >
+                      {!['Commercial / Brand Film', 'Viral Short-Form Reels Package', 'Kinetic Motion Graphics / Titles', 'Event / Conference Recap', 'Color Grading & Sound Polish', 'Full YouTube Retainer'].includes(formData.projectType) && (
+                        <option value={formData.projectType}>{formData.projectType}</option>
+                      )}
                       <option>Commercial / Brand Film</option>
                       <option>Viral Short-Form Reels Package</option>
                       <option>Kinetic Motion Graphics / Titles</option>
@@ -227,6 +320,7 @@ export const Contact: React.FC<ContactProps> = ({
                   <div>
                     <label className="block text-[#6B6862] text-[9px] sm:text-[10px] uppercase mb-1 font-medium">TIMELINE</label>
                     <select
+                      name="timeline"
                       value={formData.timeline}
                       onChange={(e) => setFormData({ ...formData, timeline: e.target.value })}
                       className="w-full min-h-[44px] bg-[#161616] border border-white/10 focus:border-[#E50914] rounded p-2.5 sm:p-3 text-white outline-none transition-colors"
@@ -243,6 +337,7 @@ export const Contact: React.FC<ContactProps> = ({
                   <label className="block text-[#6B6862] text-[9px] sm:text-[10px] uppercase mb-1 font-medium">PROJECT DETAILS / FOOTAGE LINKS</label>
                   <textarea
                     rows={2}
+                    name="details"
                     placeholder="Tell me about your footage, duration, reference styles, or goals..."
                     value={formData.details}
                     onChange={(e) => setFormData({ ...formData, details: e.target.value })}
@@ -253,11 +348,21 @@ export const Contact: React.FC<ContactProps> = ({
                 <button
                   ref={magneticBtnRef}
                   type="submit"
+                  disabled={isSubmitting}
                   onMouseEnter={playHover}
-                  className="w-full min-h-[48px] py-3 sm:py-4 bg-[#E50914] hover:bg-[#FF2A2A] active:scale-98 text-white font-bebas text-lg sm:text-2xl tracking-wider rounded transition-all shadow-[0_0_25px_rgba(229,9,20,0.5)] flex items-center justify-center gap-2.5 cursor-pointer mt-2 sm:mt-4"
+                  className="w-full min-h-[48px] py-3 sm:py-4 bg-[#E50914] hover:bg-[#FF2A2A] active:scale-98 disabled:opacity-60 disabled:cursor-not-allowed text-white font-bebas text-lg sm:text-2xl tracking-wider rounded transition-all shadow-[0_0_25px_rgba(229,9,20,0.5)] flex items-center justify-center gap-2.5 cursor-pointer mt-2 sm:mt-4"
                 >
-                  <span>TRANSMIT PROJECT BRIEF</span>
-                  <Send className="w-4 h-4 sm:w-5 sm:h-5" />
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                      <span>TRANSMITTING BRIEF...</span>
+                    </>
+                  ) : (
+                    <>
+                      <span>TRANSMIT PROJECT BRIEF</span>
+                      <Send className="w-4 h-4 sm:w-5 sm:h-5" />
+                    </>
+                  )}
                 </button>
               </form>
             )}

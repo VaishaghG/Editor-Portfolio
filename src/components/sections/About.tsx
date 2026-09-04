@@ -24,7 +24,7 @@ export const About: React.FC<AboutProps> = ({
         'Commercial Brand Films & Product Spots',
         'Corporate Storytelling & Conference Recaps',
         'Kinetic Typography & Motion Graphics (After Effects)',
-        'DaVinci Resolve Color Grading & Sound Polish',
+        'Adobe Premiere Pro & Lightroom Color Polish',
       ];
 
   return (
@@ -156,6 +156,50 @@ export const About: React.FC<AboutProps> = ({
 
           </div>
         </div>
+
+        {/* The Editor's Edge - 4 Key Highlights */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 mt-8 sm:mt-12 pt-6 sm:pt-10 editorial-border-t">
+          {[
+            {
+              number: "03+",
+              title: "YEARS EDITING",
+              description: "Hands-on experience with video editing and creative post-production."
+            },
+            {
+              number: "03",
+              title: "CREATIVE TOOLS",
+              description: "Adobe Premiere Pro, After Effects and Lightroom."
+            },
+            {
+              number: "9:16",
+              title: "VERTICAL-FIRST",
+              description: "Built for reels, short-form content and social-first storytelling."
+            },
+            {
+              number: "4K",
+              title: "DELIVERY READY",
+              description: "High-resolution exports with attention to quality and detail."
+            }
+          ].map((card, idx) => (
+            <div
+              key={idx}
+              className="bg-[#0f0f0f] border border-white/10 hover:border-[#E50914]/40 transition-colors p-4 sm:p-6 rounded-xl flex flex-col justify-between group"
+            >
+              <span className="font-bebas text-3xl sm:text-5xl md:text-6xl text-[#F2F0EC] tracking-tight mb-1 group-hover:text-[#E50914] transition-colors">
+                {card.number}
+              </span>
+              <div>
+                <span className="font-mono-code text-[10px] sm:text-xs text-[#E50914] font-bold block uppercase tracking-wider">
+                  {card.title}
+                </span>
+                <p className="font-space text-xs text-[#9E9B93] block mt-1 leading-relaxed">
+                  {card.description}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+
       </div>
     </section>
   );

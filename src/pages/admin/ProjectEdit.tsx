@@ -344,7 +344,7 @@ export const ProjectEdit: React.FC = () => {
                   required
                   value={formData.title || ''}
                   onChange={(e) => handleTitleChange(e.target.value)}
-                  placeholder="e.g. NEO VISIONS"
+                  placeholder="e.g. COMMERCIAL CUT"
                   className="w-full bg-[#161616] border border-white/10 focus:border-[#E50914] rounded p-2.5 text-white outline-none"
                 />
               </div>
@@ -504,7 +504,7 @@ export const ProjectEdit: React.FC = () => {
                   type="text"
                   value={formData.video_url || ''}
                   onChange={(e) => setFormData({ ...formData, video_url: e.target.value })}
-                  placeholder="https://assets.mixkit.co/... or Supabase storage URL"
+                  placeholder="Supabase storage video URL or direct video MP4"
                   className="flex-1 bg-[#161616] border border-white/10 focus:border-[#E50914] rounded p-2.5 text-white outline-none"
                 />
                 <label className="px-3 py-2 bg-white/10 hover:bg-white/20 text-white rounded cursor-pointer flex items-center gap-1.5 shrink-0">
@@ -541,7 +541,41 @@ export const ProjectEdit: React.FC = () => {
 
             {/* Software Tag Builder */}
             <div>
-              <label className="block text-[#9E9B93] uppercase text-[10px] mb-1">SOFTWARE TOOLS</label>
+              <div className="flex items-center justify-between mb-1">
+                <label className="block text-[#9E9B93] uppercase text-[10px]">SOFTWARE TOOLS</label>
+                <span className="text-[10px] text-[#6B6862]">ALLOWED: PREMIERE PRO, AFTER EFFECTS, LIGHTROOM</span>
+              </div>
+
+              {/* Quick Select Buttons */}
+              <div className="flex flex-wrap gap-1.5 mb-2">
+                {['Adobe Premiere Pro', 'Adobe After Effects', 'Adobe Lightroom'].map((toolName) => {
+                  const isAdded = (formData.software || []).includes(toolName);
+                  return (
+                    <button
+                      key={toolName}
+                      type="button"
+                      onClick={() => {
+                        if (isAdded) {
+                          handleRemoveSoftware(toolName);
+                        } else {
+                          setFormData({
+                            ...formData,
+                            software: [...(formData.software || []), toolName],
+                          });
+                        }
+                      }}
+                      className={`px-2.5 py-1 rounded text-[11px] font-mono-code transition-colors cursor-pointer border ${
+                        isAdded
+                          ? 'bg-[#E50914] text-white border-[#E50914]'
+                          : 'bg-white/5 text-[#9E9B93] border-white/10 hover:text-white'
+                      }`}
+                    >
+                      {isAdded ? `✓ ${toolName}` : `+ ${toolName}`}
+                    </button>
+                  );
+                })}
+              </div>
+
               <div className="flex gap-2 mb-2">
                 <input
                   type="text"
@@ -553,7 +587,7 @@ export const ProjectEdit: React.FC = () => {
                       handleAddSoftware();
                     }
                   }}
-                  placeholder="e.g. DaVinci Resolve Studio"
+                  placeholder="e.g. Adobe Premiere Pro"
                   className="flex-1 bg-[#161616] border border-white/10 rounded p-2 text-white outline-none"
                 />
                 <button
