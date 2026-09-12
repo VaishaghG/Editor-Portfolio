@@ -35,21 +35,30 @@ export const Hero: React.FC<HeroProps> = ({
 
     const ctx = gsap.context(() => {
       // Setup initial states
-      gsap.set(['.hero-title-line', '.hero-badge', '.hero-desc', '.hero-cta', '.hero-footer-item'], {
-        y: 40,
+      gsap.set(['.hero-hud', '.hero-badge', '.hero-title-line', '.hero-desc', '.hero-cta', '.hero-footer-item'], {
+        y: 30,
         opacity: 0,
       });
 
       // Animate in sequence
       const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
 
-      tl.to('.hero-title-line', {
+      tl.to('.hero-hud', {
+        y: 0,
+        opacity: 1,
+        duration: 0.6,
+      })
+      .to('.hero-badge', {
+        y: 0,
+        opacity: 1,
+        duration: 0.6,
+      }, '-=0.3')
+      .to('.hero-title-line', {
         y: 0,
         opacity: 1,
         duration: 0.9,
-        stagger: 0.12,
-        delay: 0.1,
-      })
+        stagger: 0.1,
+      }, '-=0.4')
       .to('.hero-desc', {
         y: 0,
         opacity: 1,
@@ -76,15 +85,6 @@ export const Hero: React.FC<HeroProps> = ({
           { scale: 1, opacity: 1, y: 0, duration: 1, ease: 'power2.out', delay: 0.3 }
         );
       }
-
-      // Small floating animation for subtle depth
-      gsap.to('.hero-badge-anim', {
-        y: 30,
-        duration: 0.8,
-        stagger: 0.1,
-        ease: 'power2.out',
-        delay: 0.7,
-      });
     }, containerRef);
 
     return () => ctx.revert();
@@ -110,7 +110,7 @@ export const Hero: React.FC<HeroProps> = ({
 
       {/* Top Editorial HUD & Metadata */}
       <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 md:px-8 mb-2 sm:mb-4">
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 sm:gap-4 py-2 sm:py-3 editorial-border-b border-white/10 hero-badge-anim">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 sm:gap-4 py-2 sm:py-3 editorial-border-b border-white/10 hero-hud">
           
           <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
             <span className="font-mono-code text-[10px] sm:text-[11px] text-[#E50914] font-bold">
@@ -133,7 +133,7 @@ export const Hero: React.FC<HeroProps> = ({
           {/* Left / Center: Giant Condensed Typography */}
           <div className="lg:col-span-7 flex flex-col justify-center z-10">
             
-            <div className="inline-flex items-center gap-2 mb-2 sm:mb-4 hero-badge-anim flex-wrap">
+            <div className="inline-flex items-center gap-2 mb-3 sm:mb-4 lg:mb-5 hero-badge flex-wrap">
               <span className="px-2 py-0.5 sm:px-2.5 sm:py-1 bg-[#181818] border border-white/10 rounded font-mono-code text-[9px] sm:text-[10px] text-[#F2F0EC] uppercase tracking-wider">
                 {profile?.name || 'VAISHAGH G.'} // FREELANCE
               </span>
@@ -167,7 +167,7 @@ export const Hero: React.FC<HeroProps> = ({
             </h1>
 
             {/* Editorial Supporting Manifesto */}
-            <div className="mt-3 sm:mt-6 max-w-xl hero-meta-anim">
+            <div className="mt-3 sm:mt-6 max-w-xl hero-desc">
               <p className="font-space text-xs sm:text-base md:text-xl text-[#9E9B93] leading-relaxed">
                 "{settings?.hero_manifesto || 'Turning raw, chaotic footage into high-retention stories that leave an indelible mark on the screen.'}"
               </p>
@@ -184,7 +184,7 @@ export const Hero: React.FC<HeroProps> = ({
                     onMouseEnterProject?.('PLAY REEL');
                   }}
                   onMouseLeave={onMouseLeave}
-                  className="min-h-[46px] px-5 sm:px-6 py-3 sm:py-3.5 bg-[#E50914] hover:bg-[#FF2A2A] active:scale-98 text-white font-bebas text-lg sm:text-xl tracking-wider rounded flex items-center justify-center gap-2.5 transition-all duration-300 shadow-[0_0_25px_rgba(229,9,20,0.5)] cursor-pointer group"
+                  className="hero-cta min-h-[46px] px-5 sm:px-6 py-3 sm:py-3.5 bg-[#E50914] hover:bg-[#FF2A2A] active:scale-98 text-white font-bebas text-lg sm:text-xl tracking-wider rounded flex items-center justify-center gap-2.5 transition-all duration-300 shadow-[0_0_25px_rgba(229,9,20,0.5)] cursor-pointer group"
                 >
                   <Play className="w-4 h-4 fill-current group-hover:scale-110 transition-transform" />
                   <span>{settings?.hero_cta_text || 'WATCH 2026 SHOWREEL'}</span>
@@ -196,7 +196,7 @@ export const Hero: React.FC<HeroProps> = ({
                     onExploreWork();
                   }}
                   onMouseEnter={playHover}
-                  className="min-h-[46px] px-5 sm:px-6 py-3 sm:py-3.5 bg-[#141414] hover:bg-white/10 border border-white/10 text-[#F2F0EC] font-space text-xs uppercase tracking-widest rounded flex items-center justify-center gap-2 transition-all cursor-pointer active:scale-98"
+                  className="hero-cta min-h-[46px] px-5 sm:px-6 py-3 sm:py-3.5 bg-[#141414] hover:bg-white/10 border border-white/10 text-[#F2F0EC] font-space text-xs uppercase tracking-widest rounded flex items-center justify-center gap-2 transition-all cursor-pointer active:scale-98"
                 >
                   <span>VIEW SELECTED WORK</span>
                   <ArrowDown className="w-3.5 h-3.5" />
@@ -308,7 +308,7 @@ export const Hero: React.FC<HeroProps> = ({
       <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 md:px-8 mt-4 sm:mt-8">
         <div className="flex flex-col sm:flex-row justify-between items-center gap-2 sm:gap-4 pt-3 sm:pt-4 editorial-border-t border-white/10 font-mono-code text-xs text-[#9E9B93]">
           
-          <div className="flex items-center gap-3 sm:gap-6 flex-wrap justify-center sm:justify-start text-[9px] sm:text-xs">
+          <div className="flex items-center gap-3 sm:gap-6 flex-wrap justify-center sm:justify-start text-[9px] sm:text-xs hero-footer-item">
             <span>&bull; BASED IN {profile?.location?.split('(')[0]?.trim() || 'INDIA'}</span>
             <span>&bull; {profile?.availability || 'AVAILABLE FOR COMMISSIONS'}</span>
             <span className="hidden md:inline-block">&bull; 100% TIMELINE PRECISION</span>
@@ -317,7 +317,7 @@ export const Hero: React.FC<HeroProps> = ({
           <button
             onClick={onExploreWork}
             onMouseEnter={playHover}
-            className="flex items-center gap-1.5 sm:gap-2 text-[#F2F0EC] hover:text-[#E50914] transition-colors cursor-pointer group min-h-[40px]"
+            className="flex items-center gap-1.5 sm:gap-2 text-[#F2F0EC] hover:text-[#E50914] transition-colors cursor-pointer group min-h-[40px] hero-footer-item"
           >
             <span className="text-[10px] sm:text-[11px] tracking-widest uppercase">EXPLORE WORK</span>
             <ArrowDown className="w-3 h-3 group-hover:translate-y-0.5 transition-transform" />

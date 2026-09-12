@@ -22,7 +22,7 @@ export const DEFAULT_PROFILE: DbProfile = {
   profile_image_url: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=1000&q=80',
   email: 'vaishagh.cut@gmail.com',
   phone: '+91 98765 43210',
-  instagram_handle: '@vaishagh.edits',
+  instagram_handle: '@vaish.aep',
   instagram_url: 'https://instagram.com',
   linkedin_handle: 'Vaishagh G.',
   linkedin_url: 'https://linkedin.com',
@@ -40,7 +40,7 @@ export const DEFAULT_PROFILE: DbProfile = {
 
 export const DEFAULT_SETTINGS: DbSiteSettings = {
   id: 'vg-settings-01',
-  site_title: 'Vaishagh G. | Video Editor & Motion Designer Portfolio',
+  site_title: 'Vaish. | Video Editor & Motion Designer Portfolio',
   site_description: 'Vaishagh G. - Professional Video Editor & Motion Designer specializing in high-retention commercial cuts, cinematic storytelling, and kinetic typography.',
   hero_tagline: '[ 2026 REEL ] POST-PRODUCTION • MOTION • COLOR',
   hero_badge_text: 'AVAILABLE FOR HIRE',
@@ -53,7 +53,7 @@ export const DEFAULT_SETTINGS: DbSiteSettings = {
   hero_poster_url: '',
   hero_cta_text: 'WATCH 2026 SHOWREEL',
   showreel_url: '',
-  footer_headline: 'VAISHAGH G.',
+  footer_headline: 'VAISH.',
   footer_manifesto: 'Turning raw, unstructured footage into cinematic visual experiences that captivate audiences and drive action.',
 };
 
