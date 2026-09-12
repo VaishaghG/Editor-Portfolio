@@ -135,7 +135,7 @@ export const Hero: React.FC<HeroProps> = ({
             
             <div className="inline-flex items-center gap-2 mb-3 sm:mb-4 lg:mb-5 hero-badge flex-wrap">
               <span className="px-2 py-0.5 sm:px-2.5 sm:py-1 bg-[#181818] border border-white/10 rounded font-mono-code text-[9px] sm:text-[10px] text-[#F2F0EC] uppercase tracking-wider">
-                {profile?.name || 'VAISHAGH G.'} // FREELANCE
+                {profile?.name || 'VAISH.'} // FREELANCE
               </span>
               <span className="px-2 py-0.5 sm:px-2.5 sm:py-1 bg-[#E50914]/10 border border-[#E50914]/30 rounded font-mono-code text-[9px] sm:text-[10px] text-[#E50914] font-bold uppercase tracking-wider flex items-center gap-1.5">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#E50914] animate-pulse" />

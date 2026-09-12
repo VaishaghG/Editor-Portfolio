@@ -347,10 +347,24 @@ export const ProfileEdit: React.FC = () => {
 
             <div>
               <label className="block text-[#9E9B93] uppercase text-[10px] mb-1 flex items-center gap-1">
+                <InstagramIcon className="w-3 h-3 text-[#E50914]" /> INSTAGRAM HANDLE
+              </label>
+              <input
+                type="text"
+                placeholder="@vaish.aep"
+                value={formData.instagram_handle || ''}
+                onChange={(e) => setFormData({ ...formData, instagram_handle: e.target.value })}
+                className="w-full bg-[#161616] border border-white/10 focus:border-[#E50914] rounded p-2.5 text-white outline-none"
+              />
+            </div>
+
+            <div>
+              <label className="block text-[#9E9B93] uppercase text-[10px] mb-1 flex items-center gap-1">
                 <InstagramIcon className="w-3 h-3 text-[#E50914]" /> INSTAGRAM URL
               </label>
               <input
                 type="text"
+                placeholder="https://instagram.com/vaish.aep"
                 value={formData.instagram_url || ''}
                 onChange={(e) => setFormData({ ...formData, instagram_url: e.target.value })}
                 className="w-full bg-[#161616] border border-white/10 focus:border-[#E50914] rounded p-2.5 text-white outline-none"

@@ -77,14 +77,13 @@ export const Navbar: React.FC<NavbarProps> = ({
   return (
     <>
       <header
-        className={`fixed top-0 inset-x-0 z-[500] transition-all duration-500 ${
-          isScrolled
+        className={`fixed top-0 inset-x-0 z-[500] transition-all duration-500 ${isScrolled
             ? 'py-3.5 bg-[#080808]/85 backdrop-blur-xl border-b border-white/10 shadow-[0_10px_30px_rgba(0,0,0,0.5)]'
             : 'py-5 md:py-6 bg-transparent'
-        }`}
+          }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 flex items-center justify-between">
-          
+
           {/* Brand Signature */}
           <button
             onClick={() => handleLinkClick('hero')}
@@ -94,7 +93,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             <div className="w-2.5 h-2.5 bg-[#E50914] rounded-sm group-hover:rotate-45 transition-transform duration-300 shadow-[0_0_10px_rgba(229,9,20,0.8)]" />
             <div>
               <span className="font-bebas text-xl sm:text-2xl tracking-wider text-[#F2F0EC] group-hover:text-[#E50914] transition-colors block leading-none">
-                VAISHAGH G.
+                VAISH.
               </span>
               <span className="font-mono-code text-[8px] sm:text-[9px] tracking-widest text-[#9E9B93] block uppercase mt-0.5">
                 VIDEO EDITOR &bull; MOTION
@@ -121,9 +120,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                   </span>
                   {/* Subtle red indicator underline */}
                   <span
-                    className={`absolute bottom-0 left-0 h-[1.5px] bg-[#E50914] transition-all duration-300 ${
-                      isActive ? 'w-full' : 'w-0 group-hover:w-full'
-                    }`}
+                    className={`absolute bottom-0 left-0 h-[1.5px] bg-[#E50914] transition-all duration-300 ${isActive ? 'w-full' : 'w-0 group-hover:w-full'
+                      }`}
                   />
                 </button>
               );
@@ -190,7 +188,7 @@ export const Navbar: React.FC<NavbarProps> = ({
       {/* Fullscreen Dedicated Mobile Drawer Menu */}
       {mobileMenuOpen && (
         <div className="fixed inset-0 z-[490] bg-[#060606]/98 backdrop-blur-2xl md:hidden flex flex-col justify-between p-6 pt-24 pb-8 overflow-y-auto animate-fade-in safe-padding-bottom">
-          
+
           <div className="flex flex-col gap-3">
             <div className="flex items-center justify-between font-mono-code text-[11px] text-[#6B6862] tracking-widest uppercase border-b border-white/10 pb-3">
               <span>SELECT DESTINATION</span>
@@ -211,9 +209,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                   <div className="flex items-center gap-4">
                     <span className="font-mono-code text-xs text-[#E50914] font-bold">0{idx + 1}</span>
                     <span
-                      className={`font-bebas text-4xl tracking-wider transition-colors ${
-                        isActive ? 'text-[#E50914]' : 'text-[#F2F0EC] group-hover:text-[#E50914]'
-                      }`}
+                      className={`font-bebas text-4xl tracking-wider transition-colors ${isActive ? 'text-[#E50914]' : 'text-[#F2F0EC] group-hover:text-[#E50914]'
+                        }`}
                     >
                       {link.label}
                     </span>
@@ -240,7 +237,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             </button>
 
             <div className="flex items-center justify-between font-mono-code text-[10px] text-[#6B6862] px-1">
-              <span>VAISHAGH G. &bull; INDIA</span>
+              <span>VAISH. &bull; INDIA</span>
               <span>2026 EDITION</span>
             </div>
           </div>

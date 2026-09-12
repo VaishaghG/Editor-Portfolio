@@ -216,7 +216,7 @@ export const SelectedWork: React.FC<SelectedWorkProps> = ({
                   {/* Bottom Tags & Mobile Tap CTA */}
                   <div className="flex flex-wrap items-center justify-between gap-2 pt-2.5 sm:pt-4 border-t border-white/5 font-mono-code text-xs">
                     <div className="flex flex-wrap gap-1">
-                      {project.software.map((sw, idx) => (
+                      {(project.software || []).map((sw, idx) => (
                         <span
                           key={idx}
                           className="bg-white/5 px-1.5 sm:px-2 py-0.5 rounded text-[8px] sm:text-[10px] text-[#9E9B93]"

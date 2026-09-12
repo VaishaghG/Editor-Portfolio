@@ -114,7 +114,7 @@ export const Services: React.FC<ServicesProps> = ({
                       </p>
 
                       <div className="flex flex-wrap gap-1 sm:gap-2 pt-0.5 mb-3">
-                        {service.deliverables.slice(0, 3).map((item, idx) => (
+                        {(service.deliverables || []).slice(0, 3).map((item, idx) => (
                           <span
                             key={idx}
                             className="bg-[#181818] border border-white/10 px-2 sm:px-2.5 py-0.5 sm:py-1 rounded text-[9px] sm:text-xs font-mono-code text-[#F2F0EC]"

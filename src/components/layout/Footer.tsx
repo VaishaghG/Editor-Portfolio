@@ -21,7 +21,7 @@ export const Footer: React.FC<FooterProps> = ({
   const { profile, settings } = usePortfolio();
   const [copiedEmail, setCopiedEmail] = useState(false);
 
-  const instaUrl = profile?.instagram_url || `https://instagram.com/${profile?.instagram_handle?.replace('@', '') || 'vaishagh.edits'}`;
+  const instaUrl = profile?.instagram_url || `https://instagram.com/${profile?.instagram_handle?.replace('@', '') || 'vaish.aep'}`;
   const linkedinUrl = profile?.linkedin_url || `https://linkedin.com/in/${profile?.linkedin_handle || 'vaishagh'}`;
   const emailAddress = profile?.email || 'vaishagh.cut@gmail.com';
 
@@ -41,7 +41,7 @@ export const Footer: React.FC<FooterProps> = ({
       <div className="absolute bottom-0 right-0 w-96 h-96 bg-[#E50914]/5 rounded-full blur-3xl pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
-        
+
         {/* Giant Editorial Brand Banner */}
         <div className="border-b border-white/10 pb-6 sm:pb-12 mb-6 sm:mb-12 flex flex-col lg:flex-row justify-between items-start lg:items-end gap-4 sm:gap-8">
           <div>
@@ -50,7 +50,7 @@ export const Footer: React.FC<FooterProps> = ({
               POST-PRODUCTION &bull; MOTION DESIGN &bull; COLOR
             </div>
             <h2 className="font-bebas text-3xl sm:text-7xl md:text-8xl tracking-tight leading-none text-[#F2F0EC]">
-              {settings?.footer_headline || profile?.name || 'VAISHAGH G.'}
+              {settings?.footer_headline || profile?.name || 'VAISH.'}
             </h2>
             <p className="font-space text-xs sm:text-base text-[#9E9B93] mt-1.5 max-w-lg">
               {settings?.footer_manifesto || 'Turning raw, unstructured footage into cinematic visual experiences that captivate audiences and drive action.'}
@@ -174,7 +174,7 @@ export const Footer: React.FC<FooterProps> = ({
           </div>
 
           <div className="flex items-center gap-2 sm:gap-3 text-[9px] sm:text-xs">
-            <span>&copy; {new Date().getFullYear()} VAISHAGH G.</span>
+            <span>&copy; {new Date().getFullYear()} VAISH.</span>
             <span>&bull;</span>
             <span className="text-[#F2F0EC]">CINEMATIC PORTFOLIO</span>
             <span>&bull;</span>

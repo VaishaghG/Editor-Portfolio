@@ -59,7 +59,7 @@ CREATE TABLE IF NOT EXISTS public.profile (
   profile_image_url TEXT NOT NULL DEFAULT '',
   email TEXT NOT NULL DEFAULT 'vaishagh.cut@gmail.com',
   phone TEXT DEFAULT '+91 98765 43210',
-  instagram_handle TEXT DEFAULT '@vaishagh.edits',
+  instagram_handle TEXT DEFAULT '@vaish.aep',
   instagram_url TEXT DEFAULT 'https://instagram.com',
   linkedin_handle TEXT DEFAULT 'Vaishagh G.',
   linkedin_url TEXT DEFAULT 'https://linkedin.com',

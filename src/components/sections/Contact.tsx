@@ -45,8 +45,11 @@ export const Contact: React.FC<ContactProps> = ({
 
   const emailToUse = profile?.email || 'vaishagh.cut@gmail.com';
   const phoneToUse = profile?.phone || '+91 98765 43210';
-  const instaHandle = profile?.instagram_handle || '@vaish.aep';
-  const instaUrl = profile?.instagram_url || `https://instagram.com/${profile?.instagram_handle?.replace('@', '') || 'vaish.aep'}`;
+  const rawInsta = profile?.instagram_handle;
+  const instaHandle = (!rawInsta || rawInsta === '@vaishagh.edits' || rawInsta === 'vaishagh.edits') ? '@vaish.aep' : rawInsta;
+  const instaUrl = profile?.instagram_url && !profile.instagram_url.includes('vaishagh.edits') && profile.instagram_url !== 'https://instagram.com'
+    ? profile.instagram_url
+    : `https://instagram.com/${instaHandle.replace('@', '')}`;
 
   const handleCopyEmail = () => {
     playClick?.();

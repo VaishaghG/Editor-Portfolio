@@ -290,7 +290,7 @@ export const CinemaModal: React.FC<CinemaModalProps> = ({
                   DELIVERABLES:
                 </span>
                 <div className="flex flex-wrap gap-1.5 sm:gap-2">
-                  {project.deliverables.map((item, idx) => (
+                  {(project.deliverables || []).map((item, idx) => (
                     <span
                       key={idx}
                       className="flex items-center gap-1.5 bg-[#181818] border border-white/10 px-2 sm:px-2.5 py-0.5 sm:py-1 rounded text-[10px] sm:text-xs text-[#F2F0EC]"
@@ -331,7 +331,7 @@ export const CinemaModal: React.FC<CinemaModalProps> = ({
               <div>
                 <span className="text-[#6B6862] block text-[9px] sm:text-[10px] font-mono-code mb-1 sm:mb-1.5">SOFTWARE PIPELINE</span>
                 <div className="flex flex-wrap gap-1 sm:gap-1.5">
-                  {project.software.map((sw, idx) => (
+                  {(project.software || []).map((sw, idx) => (
                     <span key={idx} className="bg-white/5 px-2 py-0.5 rounded text-[10px] sm:text-[11px] text-[#9E9B93] font-mono-code">
                       {sw}
                     </span>

@@ -17,7 +17,7 @@ export const About: React.FC<AboutProps> = ({
 }) => {
   const { profile } = usePortfolio();
 
-  const specializations = profile?.specializations?.length > 0
+  const specializations = Array.isArray(profile?.specializations) && profile.specializations.length > 0
     ? profile.specializations
     : [
         'Instagram & High-Retention Short-Form Reels',
@@ -57,7 +57,7 @@ export const About: React.FC<AboutProps> = ({
                 {/* Stylized Portrait / Editing Bay Visual */}
                 <img
                   src={profile?.profile_image_url || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=1000&q=80'}
-                  alt={`${profile?.name || 'Vaishagh G.'} - Video Editor`}
+                  alt={`${profile?.name || 'Vaish.'} - Video Editor`}
                   className="w-full h-full object-cover grayscale contrast-125 group-hover:scale-105 transition-transform duration-700 opacity-90 group-hover:opacity-100"
                 />
 
@@ -75,7 +75,7 @@ export const About: React.FC<AboutProps> = ({
 
                   <div>
                     <span className="font-bebas text-xl sm:text-3xl tracking-wider text-white block">
-                      {profile?.name || 'VAISHAGH G.'}
+                      {profile?.name || 'VAISH.'}
                     </span>
                     <span className="text-[#E50914] text-[10px] sm:text-xs font-mono-code block">
                       {profile?.role_subtitle || 'POST-PRODUCTION LEAD'}
@@ -127,7 +127,7 @@ export const About: React.FC<AboutProps> = ({
                 AREAS OF EXPERTISE:
               </span>
               <div className="space-y-1.5 sm:space-y-2">
-                {specializations.slice(0, 4).map((spec, idx) => (
+                {(specializations || []).slice(0, 4).map((spec, idx) => (
                   <div
                     key={idx}
                     className="flex items-center gap-2 sm:gap-2.5 p-1.5 sm:p-2 rounded bg-[#101010] border border-white/5 font-mono-code text-[11px] sm:text-xs text-[#F2F0EC]"

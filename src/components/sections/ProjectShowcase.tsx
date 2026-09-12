@@ -343,7 +343,7 @@ export const ProjectShowcase: React.FC<ProjectShowcaseProps> = ({
                           PIPELINE & FORMAT SPECS:
                         </div>
                         <div className="flex flex-wrap gap-1.5 font-mono-code text-xs">
-                          {project.deliverables.slice(0, 4).map((item, dIdx) => (
+                          {(project.deliverables || []).slice(0, 4).map((item, dIdx) => (
                             <span
                               key={dIdx}
                               className="bg-[#161616] border border-white/10 px-2.5 py-1 rounded text-[11px] text-[#F2F0EC]"
@@ -526,7 +526,7 @@ export const ProjectShowcase: React.FC<ProjectShowcaseProps> = ({
 
                   {/* Deliverables Tags */}
                   <div className="flex flex-wrap gap-1 font-mono-code text-[9px] mb-3">
-                    {project.deliverables.slice(0, 2).map((item, dIdx) => (
+                    {(project.deliverables || []).slice(0, 2).map((item, dIdx) => (
                       <span
                         key={dIdx}
                         className="bg-[#181818] border border-white/10 px-2 py-0.5 rounded text-[#F2F0EC]"

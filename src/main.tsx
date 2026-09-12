@@ -12,6 +12,9 @@ class ErrorBoundary extends React.Component<{ children: React.ReactNode }, { has
   static getDerivedStateFromError(error: Error) {
     return { hasError: true, error };
   }
+  componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
+    console.error('Portfolio render error:', error, errorInfo);
+  }
   render() {
     if (this.state.hasError) {
       return (
@@ -23,7 +26,7 @@ class ErrorBoundary extends React.Component<{ children: React.ReactNode }, { has
             </div>
             <h2 className="font-bebas text-2xl tracking-wide text-white">PORTFOLIO INITIALIZING</h2>
             <p className="text-xs text-[#9E9B93] leading-relaxed">
-              An unexpected render event occurred. Please refresh the page to reload the latest database assets.
+              {this.state.error?.message || 'An unexpected render event occurred. Please refresh the page to reload the latest database assets.'}
             </p>
             <button
               onClick={() => window.location.reload()}
