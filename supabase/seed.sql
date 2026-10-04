@@ -169,7 +169,7 @@ INSERT INTO public.profile (
   'Pacing is emotion. Every millisecond between cuts dictates how the viewer feels, remembers, and reacts.',
   'INDIA (IST / REMOTE)',
   'AVAILABLE WORLDWIDE',
-  'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=1000&q=80',
+  NULL,
   'vaishagh.cut@gmail.com',
   '+91 98765 43210',
   '@vaish.aep',

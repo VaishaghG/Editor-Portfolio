@@ -18,7 +18,7 @@ export const DEFAULT_PROFILE: DbProfile = {
   philosophy_quote: 'Pacing is emotion. Every millisecond between cuts dictates how the viewer feels, remembers, and reacts.',
   location: 'INDIA (IST / REMOTE)',
   availability: 'AVAILABLE WORLDWIDE',
-  profile_image_url: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=1000&q=80',
+  profile_image_url: '',
   email: 'vaishagh.cut@gmail.com',
   phone: '+91 98765 43210',
   instagram_handle: '@vaish.aep',

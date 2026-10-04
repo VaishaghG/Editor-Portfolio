@@ -146,12 +146,19 @@ export const ProfileEdit: React.FC = () => {
 
             {/* Portrait Preview & Upload */}
             <div className="flex flex-col items-center gap-3">
-              <div className="w-36 h-44 rounded-xl overflow-hidden border border-white/15 bg-black relative group shadow-xl">
-                <img
-                  src={formData.profile_image_url || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=1000&q=80'}
-                  alt="Profile Preview"
-                  className="w-full h-full object-cover grayscale contrast-125"
-                />
+              <div className="w-36 h-44 rounded-xl overflow-hidden border border-white/15 bg-black relative group shadow-xl flex items-center justify-center">
+                {formData.profile_image_url ? (
+                  <img
+                    src={formData.profile_image_url}
+                    alt="Profile Preview"
+                    className="w-full h-full object-cover grayscale contrast-125"
+                  />
+                ) : (
+                  <div className="flex flex-col items-center justify-center text-center p-3 text-[#6B6862]">
+                    <User className="w-10 h-10 mb-2 opacity-50 text-white" />
+                    <span className="text-[9px] uppercase tracking-wider font-mono-code">No Image Uploaded</span>
+                  </div>
+                )}
               </div>
 
               <label className="px-3.5 py-1.5 rounded bg-white/10 hover:bg-white/20 text-white cursor-pointer flex items-center gap-1.5 text-[11px]">
